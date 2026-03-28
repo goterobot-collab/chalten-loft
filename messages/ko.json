@@ -1,0 +1,58 @@
+{
+  "meta": {
+    "title": "찰텐 로프트 — 엘 찰텐, 파타고니아 아파트",
+    "description": "피츠 로이와 세로 토레에서 가까운 완비된 로프트 3개. 직접 예약 — 최저가 보장."
+  },
+  "nav": {
+    "properties": "숙소",
+    "about": "소개",
+    "contact": "문의",
+    "bookDirect": "직접 예약"
+  },
+  "home": {
+    "heroTagline": "산이 당신의 문 앞에서 시작되는 곳.",
+    "heroSubtitle": "엘 찰텐의 완비된 로프트 3개 — 피츠 로이와 세로 토레 트레일 근처.",
+    "checkAvailability": "예약 가능 여부 확인",
+    "checkIn": "체크인",
+    "checkOut": "체크아웃",
+    "guests": "게스트",
+    "search": "검색",
+    "whyBookDirect": "왜 직접 예약하나요?",
+    "reason1Title": "최저가",
+    "reason1Desc": "에어비앤비 수수료 없음 — 15-20% 절약.",
+    "reason2Title": "현지 호스트",
+    "reason2Desc": "엘 찰텐에 거주하는 사브리나와 직접 소통.",
+    "reason3Title": "유연성",
+    "reason3Desc": "맞춤 체크인/아웃, 현지 팁, 짐 보관.",
+    "ourLofts": "우리의 로프트",
+    "viewAll": "모든 숙소 보기",
+    "guestsCount": "{count}명",
+    "perNight": "1박"
+  },
+  "property": {
+    "bedrooms": "침실 {count}개",
+    "beds": "침대 {count}개",
+    "bathrooms": "욕실 {count}개",
+    "sqm": "{count}m²",
+    "amenities": "편의시설",
+    "bookNow": "지금 예약",
+    "kitchen": "주방",
+    "wifi": "와이파이",
+    "parking": "무료 주차",
+    "pets": "반려동물 허용",
+    "tv": "TV",
+    "washer": "세탁기",
+    "bathtub": "욕조",
+    "hairDryer": "헤어드라이어",
+    "espresso": "에스프레소 머신",
+    "luggage": "짐 보관",
+    "workspace": "작업 공간",
+    "mountainView": "산 전망",
+    "selfCheckin": "셀프 체크인"
+  },
+  "footer": {
+    "rights": "모든 권리 보유.",
+    "location": "엘 찰텐, 파타고니아 아르헨티나",
+    "directBooking": "직접 예약 — 최저가 보장"
+  }
+}

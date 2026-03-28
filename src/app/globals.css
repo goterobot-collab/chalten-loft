@@ -1,26 +1,48 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  /* Patagonia Palette */
+  --color-primary: #2C3E2D;
+  --color-accent: #B56A3F;
+  --color-accent-hover: #9A5833;
+  --color-background: #FAFAF5;
+  --color-surface: #F0EBE3;
+  --color-muted: #8B8578;
+  --color-dark: #1A1A18;
+  --color-white: #FFFFFF;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* Fonts */
+  --font-heading: var(--font-playfair);
+  --font-body: var(--font-inter);
+  --font-cjk: var(--font-noto-sans);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-background);
+  color: var(--color-dark);
+  font-family: var(--font-body), var(--font-cjk), system-ui, sans-serif;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-heading), var(--font-cjk), Georgia, serif;
+  letter-spacing: -0.02em;
+}
+
+/* Poppins light for body text — more airy */
+p, span, label, a {
+  font-weight: 400;
+}
+
+/* Book Direct Badge */
+.badge-direct {
+  background-color: var(--color-accent);
+  color: var(--color-white);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.375rem 0.75rem;
+  border-radius: 2px;
 }

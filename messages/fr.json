@@ -1,0 +1,58 @@
+{
+  "meta": {
+    "title": "Chaltén Loft — Appartements à El Chaltén, Patagonie",
+    "description": "Trois lofts entièrement équipés à deux pas du Fitz Roy et du Cerro Torre. Réservez en direct — meilleur prix garanti."
+  },
+  "nav": {
+    "properties": "Hébergements",
+    "about": "À propos",
+    "contact": "Contact",
+    "bookDirect": "Réserver Direct"
+  },
+  "home": {
+    "heroTagline": "Là où les montagnes commencent à votre porte.",
+    "heroSubtitle": "Trois lofts entièrement équipés à El Chaltén — à deux pas du Fitz Roy et du Cerro Torre.",
+    "checkAvailability": "Voir Disponibilité",
+    "checkIn": "Arrivée",
+    "checkOut": "Départ",
+    "guests": "Voyageurs",
+    "search": "Rechercher",
+    "whyBookDirect": "Pourquoi réserver en direct ?",
+    "reason1Title": "Meilleur Prix",
+    "reason1Desc": "Sans frais Airbnb — vous économisez 15-20%.",
+    "reason2Title": "Hôte Local",
+    "reason2Desc": "Contact direct avec Gabriel, qui vit à El Chaltén.",
+    "reason3Title": "Flexibilité",
+    "reason3Desc": "Arrivée/départ sur mesure, conseils locaux, consigne à bagages.",
+    "ourLofts": "Nos Lofts",
+    "viewAll": "Voir tous les hébergements",
+    "guestsCount": "{count, plural, one {# voyageur} other {# voyageurs}}",
+    "perNight": "par nuit"
+  },
+  "property": {
+    "bedrooms": "{count, plural, one {# chambre} other {# chambres}}",
+    "beds": "{count, plural, one {# lit} other {# lits}}",
+    "bathrooms": "{count, plural, one {# salle de bain} other {# salles de bain}}",
+    "sqm": "{count}m²",
+    "amenities": "Équipements",
+    "bookNow": "Réserver",
+    "kitchen": "Cuisine",
+    "wifi": "WiFi",
+    "parking": "Parking Gratuit",
+    "pets": "Animaux Acceptés",
+    "tv": "TV",
+    "washer": "Lave-linge",
+    "bathtub": "Baignoire",
+    "hairDryer": "Sèche-cheveux",
+    "espresso": "Machine à Espresso",
+    "luggage": "Consigne à Bagages",
+    "workspace": "Espace de Travail",
+    "mountainView": "Vue Montagne",
+    "selfCheckin": "Arrivée Autonome"
+  },
+  "footer": {
+    "rights": "Tous droits réservés.",
+    "location": "El Chaltén, Patagonie Argentine",
+    "directBooking": "Réservez Direct — Meilleur Prix Garanti"
+  }
+}

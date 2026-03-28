@@ -1,0 +1,58 @@
+{
+  "meta": {
+    "title": "Chaltén Loft — Apartamentos en El Chaltén, Patagonia",
+    "description": "Tres lofts completos a pasos del Fitz Roy y Cerro Torre. Reservá directo — mejor precio garantizado."
+  },
+  "nav": {
+    "properties": "Alojamientos",
+    "about": "Nosotros",
+    "contact": "Contacto",
+    "bookDirect": "Reservá Directo"
+  },
+  "home": {
+    "heroTagline": "Donde las montañas empiezan en tu puerta.",
+    "heroSubtitle": "Tres lofts completos en El Chaltén — a pasos del Fitz Roy y Cerro Torre.",
+    "checkAvailability": "Ver Disponibilidad",
+    "checkIn": "Llegada",
+    "checkOut": "Salida",
+    "guests": "Huéspedes",
+    "search": "Buscar",
+    "whyBookDirect": "¿Por qué reservar directo?",
+    "reason1Title": "Mejor Precio",
+    "reason1Desc": "Sin comisiones de Airbnb — ahorrás 15-20%.",
+    "reason2Title": "Anfitriona Local",
+    "reason2Desc": "Contacto directo con Gabriel, que vive en El Chaltén.",
+    "reason3Title": "Flexibilidad",
+    "reason3Desc": "Check-in/out a medida, tips locales, guardaequipaje.",
+    "ourLofts": "Nuestros Lofts",
+    "viewAll": "Ver todos los alojamientos",
+    "guestsCount": "{count, plural, one {# huésped} other {# huéspedes}}",
+    "perNight": "por noche"
+  },
+  "property": {
+    "bedrooms": "{count, plural, one {# dormitorio} other {# dormitorios}}",
+    "beds": "{count, plural, one {# cama} other {# camas}}",
+    "bathrooms": "{count, plural, one {# baño} other {# baños}}",
+    "sqm": "{count}m²",
+    "amenities": "Servicios",
+    "bookNow": "Reservar Ahora",
+    "kitchen": "Cocina",
+    "wifi": "WiFi",
+    "parking": "Estacionamiento Gratis",
+    "pets": "Mascotas Permitidas",
+    "tv": "TV",
+    "washer": "Lavarropas",
+    "bathtub": "Bañera",
+    "hairDryer": "Secador de Pelo",
+    "espresso": "Café Espresso",
+    "luggage": "Guardaequipaje",
+    "workspace": "Zona de Trabajo",
+    "mountainView": "Vista a la Montaña",
+    "selfCheckin": "Check-in Autónomo"
+  },
+  "footer": {
+    "rights": "Todos los derechos reservados.",
+    "location": "El Chaltén, Patagonia Argentina",
+    "directBooking": "Reservá Directo — Mejor Precio Garantizado"
+  }
+}

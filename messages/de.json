@@ -1,0 +1,58 @@
+{
+  "meta": {
+    "title": "Chaltén Loft — Apartments in El Chaltén, Patagonien",
+    "description": "Drei voll ausgestattete Lofts nur wenige Schritte vom Fitz Roy und Cerro Torre entfernt. Direkt buchen — bester Preis garantiert."
+  },
+  "nav": {
+    "properties": "Unterkünfte",
+    "about": "Über uns",
+    "contact": "Kontakt",
+    "bookDirect": "Direkt Buchen"
+  },
+  "home": {
+    "heroTagline": "Wo die Berge vor Ihrer Tür beginnen.",
+    "heroSubtitle": "Drei voll ausgestattete Lofts in El Chaltén — nur wenige Schritte vom Fitz Roy und Cerro Torre.",
+    "checkAvailability": "Verfügbarkeit prüfen",
+    "checkIn": "Anreise",
+    "checkOut": "Abreise",
+    "guests": "Gäste",
+    "search": "Suchen",
+    "whyBookDirect": "Warum direkt buchen?",
+    "reason1Title": "Bester Preis",
+    "reason1Desc": "Keine Airbnb-Gebühren — Sie sparen 15-20%.",
+    "reason2Title": "Lokale Gastgeberin",
+    "reason2Desc": "Direkter Kontakt mit Gabriel, die in El Chaltén lebt.",
+    "reason3Title": "Flexibilität",
+    "reason3Desc": "Check-in/out nach Wunsch, lokale Tipps, Gepäckaufbewahrung.",
+    "ourLofts": "Unsere Lofts",
+    "viewAll": "Alle Unterkünfte ansehen",
+    "guestsCount": "{count, plural, one {# Gast} other {# Gäste}}",
+    "perNight": "pro Nacht"
+  },
+  "property": {
+    "bedrooms": "{count, plural, one {# Schlafzimmer} other {# Schlafzimmer}}",
+    "beds": "{count, plural, one {# Bett} other {# Betten}}",
+    "bathrooms": "{count, plural, one {# Badezimmer} other {# Badezimmer}}",
+    "sqm": "{count}m²",
+    "amenities": "Ausstattung",
+    "bookNow": "Jetzt Buchen",
+    "kitchen": "Küche",
+    "wifi": "WLAN",
+    "parking": "Kostenloser Parkplatz",
+    "pets": "Haustiere Erlaubt",
+    "tv": "TV",
+    "washer": "Waschmaschine",
+    "bathtub": "Badewanne",
+    "hairDryer": "Föhn",
+    "espresso": "Espressomaschine",
+    "luggage": "Gepäckaufbewahrung",
+    "workspace": "Arbeitsbereich",
+    "mountainView": "Bergblick",
+    "selfCheckin": "Selbst-Check-in"
+  },
+  "footer": {
+    "rights": "Alle Rechte vorbehalten.",
+    "location": "El Chaltén, Patagonien Argentinien",
+    "directBooking": "Direkt Buchen — Bester Preis Garantiert"
+  }
+}

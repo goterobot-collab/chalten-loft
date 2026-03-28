@@ -1,0 +1,58 @@
+{
+  "meta": {
+    "title": "Chaltén Loft — Apartments in El Chaltén, Patagonia",
+    "description": "Three fully equipped lofts steps from Fitz Roy and Cerro Torre. Book direct — best price guaranteed."
+  },
+  "nav": {
+    "properties": "Properties",
+    "about": "About",
+    "contact": "Contact",
+    "bookDirect": "Book Direct"
+  },
+  "home": {
+    "heroTagline": "Where the mountains begin at your door.",
+    "heroSubtitle": "Three fully equipped lofts in El Chaltén — steps from Fitz Roy and Cerro Torre.",
+    "checkAvailability": "Check Availability",
+    "checkIn": "Check-in",
+    "checkOut": "Check-out",
+    "guests": "Guests",
+    "search": "Search",
+    "whyBookDirect": "Why Book Direct?",
+    "reason1Title": "Best Price",
+    "reason1Desc": "No Airbnb fees — you save 15-20%.",
+    "reason2Title": "Local Host",
+    "reason2Desc": "Direct contact with Gabriel, who lives in El Chaltén.",
+    "reason3Title": "Flexibility",
+    "reason3Desc": "Custom check-in/out, local tips, luggage storage.",
+    "ourLofts": "Our Lofts",
+    "viewAll": "View all properties",
+    "guestsCount": "{count, plural, one {# guest} other {# guests}}",
+    "perNight": "per night"
+  },
+  "property": {
+    "bedrooms": "{count, plural, one {# bedroom} other {# bedrooms}}",
+    "beds": "{count, plural, one {# bed} other {# beds}}",
+    "bathrooms": "{count, plural, one {# bathroom} other {# bathrooms}}",
+    "sqm": "{count}m²",
+    "amenities": "Amenities",
+    "bookNow": "Book Now",
+    "kitchen": "Kitchen",
+    "wifi": "WiFi",
+    "parking": "Free Parking",
+    "pets": "Pets Allowed",
+    "tv": "TV",
+    "washer": "Washer",
+    "bathtub": "Bathtub",
+    "hairDryer": "Hair Dryer",
+    "espresso": "Espresso Machine",
+    "luggage": "Luggage Storage",
+    "workspace": "Workspace",
+    "mountainView": "Mountain View",
+    "selfCheckin": "Self Check-in"
+  },
+  "footer": {
+    "rights": "All rights reserved.",
+    "location": "El Chaltén, Patagonia Argentina",
+    "directBooking": "Book Direct — Best Price Guaranteed"
+  }
+}

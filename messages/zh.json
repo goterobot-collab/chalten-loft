@@ -1,0 +1,58 @@
+{
+  "meta": {
+    "title": "查尔腾阁楼 — 阿根廷巴塔哥尼亚埃尔查尔腾公寓",
+    "description": "三间设备齐全的阁楼，距菲茨罗伊峰和托雷峰仅几步之遥。直接预订 — 最优价格保证。"
+  },
+  "nav": {
+    "properties": "住宿",
+    "about": "关于我们",
+    "contact": "联系",
+    "bookDirect": "直接预订"
+  },
+  "home": {
+    "heroTagline": "群山从你的门前开始。",
+    "heroSubtitle": "埃尔查尔腾三间设备齐全的阁楼 — 距菲茨罗伊和托雷峰步道仅几步。",
+    "checkAvailability": "查看空房",
+    "checkIn": "入住",
+    "checkOut": "退房",
+    "guests": "旅客",
+    "search": "搜索",
+    "whyBookDirect": "为什么直接预订？",
+    "reason1Title": "最优价格",
+    "reason1Desc": "无Airbnb手续费 — 节省15-20%。",
+    "reason2Title": "当地房东",
+    "reason2Desc": "直接联系住在埃尔查尔腾的萨布丽娜。",
+    "reason3Title": "灵活性",
+    "reason3Desc": "定制入住/退房时间、当地建议、行李寄存。",
+    "ourLofts": "我们的阁楼",
+    "viewAll": "查看所有住宿",
+    "guestsCount": "{count}位旅客",
+    "perNight": "每晚"
+  },
+  "property": {
+    "bedrooms": "{count}间卧室",
+    "beds": "{count}张床",
+    "bathrooms": "{count}间浴室",
+    "sqm": "{count}m²",
+    "amenities": "设施",
+    "bookNow": "立即预订",
+    "kitchen": "厨房",
+    "wifi": "WiFi",
+    "parking": "免费停车",
+    "pets": "允许携带宠物",
+    "tv": "电视",
+    "washer": "洗衣机",
+    "bathtub": "浴缸",
+    "hairDryer": "吹风机",
+    "espresso": "浓缩咖啡机",
+    "luggage": "行李寄存",
+    "workspace": "工作区",
+    "mountainView": "山景",
+    "selfCheckin": "自助入住"
+  },
+  "footer": {
+    "rights": "版权所有。",
+    "location": "埃尔查尔腾，巴塔哥尼亚，阿根廷",
+    "directBooking": "直接预订 — 最优价格保证"
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "meta": {
+    "title": "チャルテン ロフト — エル・チャルテン、パタゴニアのアパートメント",
+    "description": "フィッツロイとセロトーレのすぐそばにある3つのフル装備ロフト。直接予約 — 最安値保証。"
+  },
+  "nav": {
+    "properties": "宿泊施設",
+    "about": "概要",
+    "contact": "お問い合わせ",
+    "bookDirect": "直接予約"
+  },
+  "home": {
+    "heroTagline": "山があなたのドアの前から始まる場所。",
+    "heroSubtitle": "エル・チャルテンの3つのフル装備ロフト — フィッツロイとセロトーレのトレイルのすぐそば。",
+    "checkAvailability": "空室状況を確認",
+    "checkIn": "チェックイン",
+    "checkOut": "チェックアウト",
+    "guests": "ゲスト",
+    "search": "検索",
+    "whyBookDirect": "なぜ直接予約？",
+    "reason1Title": "最安値",
+    "reason1Desc": "Airbnb手数料なし — 15-20%お得。",
+    "reason2Title": "地元のホスト",
+    "reason2Desc": "エル・チャルテン在住のサブリナと直接連絡。",
+    "reason3Title": "柔軟性",
+    "reason3Desc": "チェックイン/アウト調整、地元のヒント、荷物預かり。",
+    "ourLofts": "ロフト一覧",
+    "viewAll": "すべての宿泊施設を見る",
+    "guestsCount": "{count}名",
+    "perNight": "1泊"
+  },
+  "property": {
+    "bedrooms": "寝室{count}室",
+    "beds": "ベッド{count}台",
+    "bathrooms": "バスルーム{count}室",
+    "sqm": "{count}m²",
+    "amenities": "設備",
+    "bookNow": "今すぐ予約",
+    "kitchen": "キッチン",
+    "wifi": "WiFi",
+    "parking": "無料駐車場",
+    "pets": "ペット可",
+    "tv": "テレビ",
+    "washer": "洗濯機",
+    "bathtub": "バスタブ",
+    "hairDryer": "ドライヤー",
+    "espresso": "エスプレッソマシン",
+    "luggage": "荷物預かり",
+    "workspace": "ワークスペース",
+    "mountainView": "山の眺望",
+    "selfCheckin": "セルフチェックイン"
+  },
+  "footer": {
+    "rights": "全著作権所有。",
+    "location": "エル・チャルテン、パタゴニア、アルゼンチン",
+    "directBooking": "直接予約 — 最安値保証"
+  }
+}
