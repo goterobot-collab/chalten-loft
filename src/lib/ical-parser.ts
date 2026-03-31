@@ -27,7 +27,9 @@ export function parseICal(icalText: string): CalendarEvent[] {
 
     if (startMatch && endMatch) {
       const summary = summaryMatch?.[1]?.trim() || 'Blocked'
-      const isReserved = summary.toLowerCase().includes('reserved')
+      const isReserved = summary.toLowerCase().includes('reserved') ||
+        summary.toLowerCase().includes('not available') ||
+        summary.toLowerCase().includes('airbnb')
 
       // Extract reservation ID from description URL
       let reservationId: string | undefined

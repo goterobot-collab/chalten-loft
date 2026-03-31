@@ -1,22 +1,29 @@
 import Image from 'next/image'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { chaltenPhotos } from '@/lib/properties'
 
-export default function AboutPage() {
+type Props = {
+  params: Promise<{ locale: string }>
+}
+
+export default async function AboutPage({ params }: Props) {
+  const { locale } = await params
+  setRequestLocale(locale)
+  const t = await getTranslations({ locale, namespace: 'about' })
+
   return (
     <>
       {/* Hero — Das Wanda editorial style */}
       <section className="py-24 sm:py-32">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
           <p className="text-sm uppercase tracking-[0.3em] text-accent font-semibold mb-6">
-            Our Story
+            {t('ourStory')}
           </p>
-          <h1 className="font-heading text-4xl sm:text-5xl md:text-6xl text-primary mb-8 leading-tight">
-            Where the mountains<br />
-            begin at your door.
+          <h1 className="font-heading text-4xl sm:text-5xl md:text-6xl text-primary mb-8 leading-tight whitespace-pre-line">
+            {t('heroTitle')}
           </h1>
           <p className="text-lg text-muted leading-relaxed max-w-2xl mx-auto">
-            We came to El Chaltén and somewhere between the first hike
-            and the first night of wind, we realized we did not want to leave.
+            {t('heroSubtitle')}
           </p>
         </div>
       </section>
@@ -36,23 +43,9 @@ export default function AboutPage() {
       <section className="py-24 sm:py-32">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
           <div className="space-y-8 text-dark/80 leading-relaxed text-[17px]">
-            <p>
-              The lofts exist because we wanted guests to have what we would want
-              as travellers ourselves. After six hours on the trail, you do not want
-              a hotel lobby. You want a hot shower, a real kitchen, and a window that
-              faces something that matters.
-            </p>
-            <p>
-              Each loft is fully equipped — not a studio with a microwave, but an actual
-              kitchen where you can cook a proper meal. A washer because after four days
-              of trekking your clothes need it. A bed that is genuinely comfortable, not
-              just acceptable.
-            </p>
-            <p>
-              We live in El Chaltén. When you book direct, you are not talking to a call
-              centre — you are talking to someone who walked the same trails yesterday
-              and knows which one to do first based on today&apos;s weather.
-            </p>
+            <p>{t('storyP1')}</p>
+            <p>{t('storyP2')}</p>
+            <p>{t('storyP3')}</p>
           </div>
 
           {/* Host info */}
@@ -62,12 +55,10 @@ export default function AboutPage() {
                 <span className="font-heading text-3xl text-primary">G</span>
               </div>
               <div>
-                <h3 className="font-heading text-xl text-primary mb-1">Gabriel</h3>
-                <p className="text-muted text-sm mb-3">Host · El Chaltén local · 153 reviews</p>
+                <h3 className="font-heading text-xl text-primary mb-1">{t('hostName')}</h3>
+                <p className="text-muted text-sm mb-3">{t('hostRole')}</p>
                 <p className="text-dark/70 text-[15px] leading-relaxed">
-                  Response rate 97%. Usually responds within one hour.
-                  Speaks Spanish, English, and enough trail vocabulary
-                  in six other languages to point you in the right direction.
+                  {t('hostDesc')}
                 </p>
               </div>
             </div>
@@ -81,19 +72,19 @@ export default function AboutPage() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-12 text-center">
             <div>
               <p className="font-heading text-4xl sm:text-5xl font-bold">3</p>
-              <p className="text-white/60 text-sm mt-2">Lofts</p>
+              <p className="text-white/60 text-sm mt-2">{t('lofts')}</p>
             </div>
             <div>
               <p className="font-heading text-4xl sm:text-5xl font-bold">153</p>
-              <p className="text-white/60 text-sm mt-2">Reviews</p>
+              <p className="text-white/60 text-sm mt-2">{t('reviews')}</p>
             </div>
             <div>
               <p className="font-heading text-4xl sm:text-5xl font-bold">4.66</p>
-              <p className="text-white/60 text-sm mt-2">Average Rating</p>
+              <p className="text-white/60 text-sm mt-2">{t('averageRating')}</p>
             </div>
             <div>
               <p className="font-heading text-4xl sm:text-5xl font-bold">2</p>
-              <p className="text-white/60 text-sm mt-2">Years Hosting</p>
+              <p className="text-white/60 text-sm mt-2">{t('yearsHosting')}</p>
             </div>
           </div>
         </div>

@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation'
-import { getTranslations } from 'next-intl/server'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
 import Image from 'next/image'
 import { properties } from '@/lib/properties'
 import { Users, Bed, Bath, Maximize, Wifi, Car, PawPrint, Tv, CookingPot, Briefcase, Coffee, Luggage, Mountain, Key, Wind } from 'lucide-react'
@@ -11,9 +11,7 @@ type Props = {
   params: Promise<{ locale: string; slug: string }>
 }
 
-export async function generateStaticParams() {
-  return properties.map((p) => ({ slug: p.slug }))
-}
+export const dynamic = 'force-dynamic'
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
@@ -42,6 +40,7 @@ const amenityIcons: Record<string, React.ReactNode> = {
 
 export default async function PropertyPage({ params }: Props) {
   const { slug, locale } = await params
+  setRequestLocale(locale)
   const property = properties.find((p) => p.slug === slug)
 
   if (!property) notFound()
@@ -98,15 +97,10 @@ export default async function PropertyPage({ params }: Props) {
               {/* Description — Das Wanda editorial style */}
               <div className="border-t border-surface pt-10">
                 <p className="text-lg leading-relaxed text-dark/80 max-w-2xl">
-                  Your space in El Chaltén — a modern corner surrounded by nature,
-                  a bright oasis in the center of town. A perfect blend of warmth
-                  and modernity, this {property.sqm}m² designer loft is ideal for
-                  disconnecting, resting and waking up to mountain views.
+                  {t('detailDesc1', { sqm: property.sqm })}
                 </p>
                 <p className="text-base leading-relaxed text-muted mt-4 max-w-2xl">
-                  Three blocks from the Fitz Roy trailhead. Four from the town centre.
-                  Everything you need after a day on the trail: a real kitchen, a
-                  comfortable bed, and hot water that does not run out.
+                  {t('detailDesc2')}
                 </p>
               </div>
 
@@ -179,13 +173,16 @@ export default async function PropertyPage({ params }: Props) {
                       ))}
                     </select>
                   </div>
-                  <button className="w-full bg-accent hover:bg-accent-hover text-white font-semibold rounded-xl px-6 py-3.5 transition-all hover:shadow-lg hover:-translate-y-0.5 mt-2">
+                  <a
+                    href={`/${locale}/booking/${property.slug}`}
+                    className="block w-full bg-accent hover:bg-accent-hover text-white font-semibold rounded-xl px-6 py-3.5 transition-all hover:shadow-lg hover:-translate-y-0.5 mt-2 text-center"
+                  >
                     {t('bookNow')}
-                  </button>
+                  </a>
                 </div>
 
                 <p className="text-xs text-muted text-center mt-4">
-                  Book direct — best price guaranteed
+                  {t('bookDirectBest')}
                 </p>
               </div>
             </div>

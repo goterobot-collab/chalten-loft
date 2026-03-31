@@ -1,0 +1,17 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/sync-bookings",
+      "schedule": "0 6 * * *"
+    },
+    {
+      "path": "/api/cron/cleaning-notifications",
+      "schedule": "0 10 * * *"
+    },
+    {
+      "path": "/api/cron/guest-emails",
+      "schedule": "0 8 * * *"
+    }
+  ]
+}
+

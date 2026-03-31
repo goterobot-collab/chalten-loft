@@ -14,17 +14,23 @@ export async function GET(
   }
 
   try {
-    // Fetch iCal feed from Airbnb
-    const response = await fetch(feedUrl, {
-      next: { revalidate: 600 }, // Cache for 10 minutes
-    })
-
-    if (!response.ok) {
-      throw new Error(`iCal fetch failed: ${response.status}`)
+    // Fetch all iCal feeds for this property and merge blocked dates
+    const urls = Array.isArray(feedUrl) ? feedUrl : [feedUrl]
+    let allEvents = []
+    for (const url of urls) {
+      const response = await fetch(url, { cache: 'no-store' })
+      if (!response.ok) throw new Error(`iCal fetch failed: ${response.status}`)
+      const icalText = await response.text()
+      allEvents.push(...parseICal(icalText))
     }
-
-    const icalText = await response.text()
-    const events = parseICal(icalText)
+    // Deduplicate events by startDate+endDate
+    const seen = new Set<string>()
+    const events = allEvents.filter(e => {
+      const key = `${e.startDate}|${e.endDate}`
+      if (seen.has(key)) return false
+      seen.add(key)
+      return true
+    })
     const blockedDates = getBlockedDates(events)
 
     return NextResponse.json({

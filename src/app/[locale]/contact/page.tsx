@@ -1,7 +1,17 @@
 import { MapPin, Mail, Clock, MessageCircle, Luggage } from 'lucide-react'
 import Image from 'next/image'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
+import ContactForm from '@/components/contact/ContactForm'
 
-export default function ContactPage() {
+type Props = {
+  params: Promise<{ locale: string }>
+}
+
+export default async function ContactPage({ params }: Props) {
+  const { locale } = await params
+  setRequestLocale(locale)
+  const t = await getTranslations({ locale, namespace: 'contact' })
+
   return (
     <>
       {/* Hero with Logo */}
@@ -19,14 +29,13 @@ export default function ContactPage() {
           </div>
 
           <p className="text-sm uppercase tracking-[0.3em] text-accent font-semibold mb-6">
-            Contact
+            {t('title')}
           </p>
           <h1 className="font-heading text-4xl sm:text-5xl md:text-6xl text-primary mb-8">
-            Questions before booking?
+            {t('heroTitle')}
           </h1>
           <p className="text-lg text-muted leading-relaxed max-w-2xl mx-auto">
-            We respond in Spanish, English, and usually within an hour.
-            Ask us anything about the lofts, the trails, or El Chaltén.
+            {t('heroSubtitle')}
           </p>
         </div>
       </section>
@@ -40,11 +49,10 @@ export default function ContactPage() {
             </div>
             <div>
               <h3 className="font-heading text-lg text-primary mb-1">
-                Luggage Storage Available
+                {t('luggageTitle')}
               </h3>
               <p className="text-muted text-sm leading-relaxed">
-                Arriving early or leaving late? We have a secure locker where you can leave
-                your bags before check-in or after check-out — free of charge.
+                {t('luggageDesc')}
               </p>
             </div>
           </div>
@@ -59,68 +67,20 @@ export default function ContactPage() {
             {/* Contact Form */}
             <div>
               <h2 className="font-heading text-2xl text-primary mb-8">
-                Send us a message
+                {t('sendMessage')}
               </h2>
-              <form className="space-y-5">
-                <div>
-                  <label className="block text-[11px] font-semibold uppercase tracking-wider text-muted mb-1.5">
-                    Name
-                  </label>
-                  <input
-                    type="text"
-                    className="w-full border border-surface rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-accent/30 transition-all bg-white"
-                    placeholder="Your name"
-                  />
-                </div>
-                <div>
-                  <label className="block text-[11px] font-semibold uppercase tracking-wider text-muted mb-1.5">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    className="w-full border border-surface rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-accent/30 transition-all bg-white"
-                    placeholder="your@email.com"
-                  />
-                </div>
-                <div>
-                  <label className="block text-[11px] font-semibold uppercase tracking-wider text-muted mb-1.5">
-                    Loft
-                  </label>
-                  <select className="w-full border border-surface rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-accent/30 transition-all bg-white">
-                    <option>Any loft</option>
-                    <option>Dpto 1 — Fitz Roy (75m²)</option>
-                    <option>Dpto 2 — Cerro Torre (40m²)</option>
-                    <option>Dpto 3 — Poincenot (55m²)</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-[11px] font-semibold uppercase tracking-wider text-muted mb-1.5">
-                    Message
-                  </label>
-                  <textarea
-                    rows={5}
-                    className="w-full border border-surface rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-accent/30 transition-all bg-white resize-none"
-                    placeholder="Tell us about your trip plans..."
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="w-full bg-accent hover:bg-accent-hover text-white font-semibold rounded-xl px-6 py-3.5 transition-all hover:shadow-lg hover:-translate-y-0.5"
-                >
-                  Send Message
-                </button>
-              </form>
+              <ContactForm />
             </div>
 
             {/* Contact Info */}
             <div className="space-y-8">
               <h2 className="font-heading text-2xl text-primary mb-8">
-                Or reach us directly
+                {t('orReachUs')}
               </h2>
 
               <div className="space-y-6">
                 <a
-                  href="https://wa.me/5491112345678"
+                  href="https://wa.me/5492901644067"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-start gap-4 p-5 rounded-2xl bg-white border border-surface hover:border-green-300 hover:shadow-md transition-all group"
@@ -129,8 +89,8 @@ export default function ContactPage() {
                     <MessageCircle className="w-5 h-5 text-green-600" />
                   </div>
                   <div>
-                    <p className="font-semibold text-primary text-sm">WhatsApp</p>
-                    <p className="text-muted text-sm">Fastest way to reach us</p>
+                    <p className="font-semibold text-primary text-sm">{t('whatsapp')}</p>
+                    <p className="text-muted text-sm">{t('whatsappDesc')}</p>
                   </div>
                 </a>
 
@@ -139,7 +99,7 @@ export default function ContactPage() {
                     <Mail className="w-5 h-5 text-accent" />
                   </div>
                   <div>
-                    <p className="font-semibold text-primary text-sm">Email</p>
+                    <p className="font-semibold text-primary text-sm">{t('emailLabel')}</p>
                     <p className="text-muted text-sm">chaltenloft@gmail.com</p>
                   </div>
                 </div>
@@ -149,10 +109,10 @@ export default function ContactPage() {
                     <MapPin className="w-5 h-5 text-accent" />
                   </div>
                   <div>
-                    <p className="font-semibold text-primary text-sm">Location</p>
+                    <p className="font-semibold text-primary text-sm">{t('locationLabel')}</p>
                     <p className="text-muted text-sm">
-                      El Chaltén, Santa Cruz, Argentina<br />
-                      3 blocks from Fitz Roy trailhead
+                      {t('locationValue')}<br />
+                      {t('locationDetail')}
                     </p>
                   </div>
                 </div>
@@ -162,8 +122,8 @@ export default function ContactPage() {
                     <Clock className="w-5 h-5 text-accent" />
                   </div>
                   <div>
-                    <p className="font-semibold text-primary text-sm">Response Time</p>
-                    <p className="text-muted text-sm">Usually within 1 hour</p>
+                    <p className="font-semibold text-primary text-sm">{t('responseTime')}</p>
+                    <p className="text-muted text-sm">{t('responseTimeValue')}</p>
                   </div>
                 </div>
 
@@ -172,8 +132,8 @@ export default function ContactPage() {
                     <Luggage className="w-5 h-5 text-accent" />
                   </div>
                   <div>
-                    <p className="font-semibold text-primary text-sm">Luggage Storage</p>
-                    <p className="text-muted text-sm">Free secure locker — drop bags before check-in or after check-out</p>
+                    <p className="font-semibold text-primary text-sm">{t('luggageLabel')}</p>
+                    <p className="text-muted text-sm">{t('luggageValue')}</p>
                   </div>
                 </div>
               </div>

@@ -1,4 +1,4 @@
-import { getTranslations } from 'next-intl/server'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
 import { properties } from '@/lib/properties'
 import { Users, Bed, Maximize, MapPin } from 'lucide-react'
@@ -10,6 +10,7 @@ type Props = {
 
 export default async function PropertiesPage({ params }: Props) {
   const { locale } = await params
+  setRequestLocale(locale)
   const t = await getTranslations({ locale, namespace: 'home' })
   const tp = await getTranslations({ locale, namespace: 'property' })
 
@@ -25,8 +26,7 @@ export default async function PropertiesPage({ params }: Props) {
               {t('ourLofts')}
             </h1>
             <p className="text-lg text-muted max-w-2xl mx-auto">
-              Three fully equipped lofts in the heart of El Chaltén.
-              Each one designed for people who came to move.
+              {tp('propertiesSubtitle')}
             </p>
           </div>
 
@@ -77,14 +77,12 @@ export default async function PropertiesPage({ params }: Props) {
                     </div>
 
                     <p className="text-dark/70 leading-relaxed max-w-md">
-                      A {property.sqm}m² designer loft in the center of El Chaltén.
-                      Fully equipped kitchen, comfortable bed, mountain views.
-                      Three blocks from the trailhead.
+                      {tp('propertyDesc', { sqm: property.sqm })}
                     </p>
 
                     <div className="flex items-center gap-1.5 text-xs text-muted/60">
                       <MapPin className="w-3 h-3" />
-                      El Chaltén, Patagonia Argentina
+                      {t('location')}
                     </div>
 
                     <span className="inline-flex items-center gap-2 text-accent font-semibold group-hover:gap-3 transition-all">

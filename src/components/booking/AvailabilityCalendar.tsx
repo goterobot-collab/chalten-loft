@@ -81,7 +81,7 @@ export default function AvailabilityCalendar({ propertySlug, onDateChange }: Pro
       {nights > 0 && (
         <div className="bg-surface rounded-lg p-4 text-center">
           <span className="text-primary font-heading text-lg">
-            {nights} {nights === 1 ? 'night' : 'nights'} selected
+            {t('nightsSelected', { count: nights })}
           </span>
         </div>
       )}

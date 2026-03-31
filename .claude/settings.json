@@ -1,0 +1,75 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run test*)",
+      "Bash(npm run lint*)",
+      "Bash(npm run build*)",
+      "Bash(python3 -m pytest*)",
+      "Bash(python3 evaluator*)",
+      "Bash(git status*)",
+      "Bash(git diff*)",
+      "Bash(git log*)",
+      "Bash(git stash*)",
+      "Bash(git branch*)",
+      "Bash(git add*)",
+      "Bash(bun run test*)",
+      "Bash(bun run build*)",
+      "Bash(bun run lint*)",
+      "Bash(npx tsc --noEmit*)",
+      "Bash(npx eslint*)",
+      "Bash(npx prettier*)"
+    ]
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [{
+          "type": "command",
+          "command": "echo '═══ SESSION v5 ═══' && echo \"Branch: $(git branch --show-current 2>/dev/null || echo 'no git')\" && echo \"Modified: $(git status --short 2>/dev/null | wc -l | tr -d ' ') files\" && echo '───' && if [ -f CURRENT_TASK.md ] && [ -s CURRENT_TASK.md ]; then head -20 CURRENT_TASK.md; else echo 'No context found — run /auto-diagnose'; fi && echo '═══ Read CLAUDE.md now ═══'"
+        }]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Write",
+        "hooks": [{
+          "type": "command",
+          "command": "echo 'ANTI-PROLIFERATION: Does this file serve a purpose no existing file covers?'"
+        }]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [{
+          "type": "command",
+          "command": "if [ -f package.json ]; then echo 'VERIFY: run tests/lint now'; elif [ -f requirements.txt ] || [ -f pyproject.toml ]; then echo 'VERIFY: run pytest now'; elif [ -f Cargo.toml ]; then echo 'VERIFY: run cargo check now'; fi"
+        }]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [{
+          "type": "command",
+          "command": "echo '═══ SESSION CLOSING ═══' && echo 'UPDATE: CURRENT_TASK.md (what done, next steps, blockers)' && echo 'UPDATE: EVOLUTION_LOG.md (what changed, what improved)' && echo 'CAPTURE: any new learnings to knowledge/' && echo '═══════════════════════'"
+        }]
+      }
+    ],
+    "PostCompact": [
+      {
+        "hooks": [{
+          "type": "command",
+          "command": "echo '═══ CONTEXT COMPACTED ═══' && echo 'RE-READ: CLAUDE.md and CURRENT_TASK.md NOW' && echo 'RULES: verify after EVERY change, check knowledge/failures/ before new approaches' && if [ -f CURRENT_TASK.md ]; then echo '───' && head -10 CURRENT_TASK.md; fi && echo '═══════════════════════'"
+        }]
+      }
+    ],
+    "Notification": [
+      {
+        "hooks": [{
+          "type": "command",
+          "command": "osascript -e 'display notification \"Claude needs attention\" with title \"Claude Code\" sound name \"Glass\"' 2>/dev/null || true"
+        }]
+      }
+    ]
+  }
+}

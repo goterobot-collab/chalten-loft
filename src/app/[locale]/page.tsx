@@ -1,4 +1,4 @@
-import { getTranslations } from 'next-intl/server'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
 import Image from 'next/image'
 import { Link } from '@/i18n/navigation'
 import { properties, heroImage, chaltenPhotos } from '@/lib/properties'
@@ -11,6 +11,7 @@ type Props = {
 
 export default async function HomePage({ params }: Props) {
   const { locale } = await params
+  setRequestLocale(locale)
   const t = await getTranslations({ locale, namespace: 'home' })
   const tp = await getTranslations({ locale, namespace: 'property' })
 
@@ -33,7 +34,7 @@ export default async function HomePage({ params }: Props) {
         <div className="relative z-10 text-center text-white max-w-5xl mx-auto px-4">
           {/* Tagline — Das Wanda manifesto style */}
           <p className="text-sm sm:text-base uppercase tracking-[0.3em] text-white/70 mb-6">
-            El Chaltén, Patagonia
+            {t('location')}
           </p>
           <h1 className="font-heading text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold mb-8 leading-[0.95]">
             {t('heroTagline')}
@@ -201,7 +202,7 @@ export default async function HomePage({ params }: Props) {
                     {/* Location tag */}
                     <div className="flex items-center gap-1.5 text-xs text-muted/70 mb-5">
                       <MapPin className="w-3 h-3" />
-                      El Chaltén, Patagonia
+                      {t('location')}
                     </div>
 
                     <div className="pt-5 border-t border-surface/80">
@@ -229,23 +230,12 @@ export default async function HomePage({ params }: Props) {
                 El Chaltén
               </p>
               <h2 className="font-heading text-3xl sm:text-4xl text-primary mb-8 leading-tight">
-                The trekking capital of Argentina.
+                {t('chaltenTitle')}
               </h2>
               <div className="space-y-5 text-muted leading-relaxed text-[15px]">
-                <p>
-                  The trails begin at the edge of town. No shuttle buses, no entrance gates.
-                  You walk out of the loft and in twenty minutes you are in the forest.
-                </p>
-                <p>
-                  Fitz Roy and Cerro Torre are not a day trip — they are your neighbours.
-                  The light changes four times before breakfast and the wind has a personality
-                  you will learn to respect.
-                </p>
-                <p>
-                  Our lofts are three blocks from the Fitz Roy trailhead and four from the
-                  town centre. Everything in El Chaltén is close. What matters at the end
-                  of the day is a warm bed and hot water that does not run out.
-                </p>
+                <p>{t('chaltenP1')}</p>
+                <p>{t('chaltenP2')}</p>
+                <p>{t('chaltenP3')}</p>
               </div>
             </div>
             <div className="space-y-4">

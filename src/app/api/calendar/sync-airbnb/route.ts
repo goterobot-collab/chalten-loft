@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { icalFeeds, type PropertySlug } from '@/lib/ical-config'
+import { icalFeeds } from '@/lib/ical-config'
 import { parseICal } from '@/lib/ical-parser'
 import { addCheckInEvent, addCheckOutEvent, addTurnaroundEvent, clearAllEvents } from '@/lib/google-calendar'
 import { properties } from '@/lib/properties'
@@ -24,23 +24,39 @@ export async function GET() {
   // Step 2: Importar reservas de cada propiedad
   const results: { property: string; events: number; errors: string[] }[] = []
 
-  for (const [slug, feedUrl] of Object.entries(icalFeeds)) {
+  for (const [slug, feedUrls] of Object.entries(icalFeeds)) {
     const property = properties.find(p => p.slug === slug)
     const propertyName = property ? property.subtitle : slug // "Dpto 1 — Fitz Roy" etc.
     let eventCount = 0
     const errors: string[] = []
 
     try {
-      const response = await fetch(feedUrl, { cache: 'no-store' })
-      if (!response.ok) throw new Error(`iCal fetch failed: ${response.status}`)
+      // Merge events from all URLs for this property, deduplicate by checkIn+checkOut
+      const seen = new Set<string>()
+      const allReservations = []
 
-      const icalText = await response.text()
-      const events = parseICal(icalText)
+      for (const feedUrl of feedUrls) {
+        try {
+          const response = await fetch(feedUrl, { cache: 'no-store' })
+          if (!response.ok) throw new Error(`iCal fetch failed: ${response.status}`)
+          const icalText = await response.text()
+          const events = parseICal(icalText)
 
-      // Solo reservas futuras, ordenadas por fecha
-      const reservations = events
-        .filter(e => e.isReserved && e.endDate >= today)
-        .sort((a, b) => a.startDate.localeCompare(b.startDate))
+          for (const e of events) {
+            if (!e.isReserved || e.endDate < today) continue
+            const key = `${e.startDate}|${e.endDate}`
+            if (!seen.has(key)) {
+              seen.add(key)
+              allReservations.push(e)
+            }
+          }
+        } catch (err) {
+          errors.push(`Feed ${feedUrl.split('/').pop()}: ${err}`)
+        }
+      }
+
+      // Ordenar por fecha de entrada
+      const reservations = allReservations.sort((a, b) => a.startDate.localeCompare(b.startDate))
 
       for (let i = 0; i < reservations.length; i++) {
         const reservation = reservations[i]
@@ -67,11 +83,7 @@ export async function GET() {
         }
 
         try {
-          // ¿El checkout de esta reserva coincide con el checkin de la siguiente?
           const isBackToBack = nextReservation && checkOut === nextReservation.startDate
-
-          // INGRESO (verde) — siempre, excepto si el checkin coincide con el checkout anterior
-          // (en ese caso ya se creó un evento 🧹 Limpieza en la iteración anterior)
           const prevReservation = reservations[i - 1]
           const isPrevBackToBack = prevReservation && prevReservation.endDate === checkIn
 
@@ -81,14 +93,12 @@ export async function GET() {
           }
 
           if (isBackToBack) {
-            // 🧹 Limpieza entre huéspedes (naranja) — sale uno, entra otro mismo día
             const nextGuestName = nextReservation.summary === 'Reserved' || nextReservation.summary === 'Airbnb'
               ? 'Huésped Airbnb'
               : nextReservation.summary
             await addTurnaroundEvent({ ...params, nextGuestName })
             eventCount++
           } else {
-            // 🔴 Egreso + Limpieza (rojo) — se va, queda libre
             await addCheckOutEvent(params)
             eventCount++
           }
@@ -98,7 +108,7 @@ export async function GET() {
         }
       }
     } catch (err) {
-      errors.push(`Feed error: ${err}`)
+      errors.push(`Error general: ${err}`)
     }
 
     results.push({ property: slug, events: eventCount, errors })
