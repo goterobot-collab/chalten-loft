@@ -32,7 +32,6 @@ export async function GET() {
 
     try {
       // Merge events from all URLs for this property, deduplicate by checkIn+checkOut
-      const seen = new Set<string>()
       const allReservations = []
 
       for (const feedUrl of feedUrls) {
@@ -44,19 +43,38 @@ export async function GET() {
 
           for (const e of events) {
             if (!e.isReserved || e.endDate < today) continue
-            const key = `${e.startDate}|${e.endDate}`
-            if (!seen.has(key)) {
-              seen.add(key)
-              allReservations.push(e)
-            }
+            allReservations.push(e)
           }
         } catch (err) {
           errors.push(`Feed ${feedUrl.split('/').pop()}: ${err}`)
         }
       }
 
-      // Ordenar por fecha de entrada
-      const reservations = allReservations.sort((a, b) => a.startDate.localeCompare(b.startDate))
+      // Dedup por solapamiento: si dos reservas se solapan en fechas, quedarse con la que
+      // tiene nombre de huésped real (no "Not available" / "Huésped Airbnb")
+      const deduped = allReservations
+        .sort((a, b) => a.startDate.localeCompare(b.startDate))
+        .filter((r, idx, arr) => {
+          // Check if this reservation overlaps with any earlier one
+          const overlaps = arr.slice(0, idx).some(prev =>
+            r.startDate < prev.endDate && r.endDate > prev.startDate
+          )
+          if (!overlaps) return true
+          // Overlaps — keep this one only if it has a real guest name and the prev doesn't
+          const prev = arr.slice(0, idx).find(p =>
+            r.startDate < p.endDate && r.endDate > p.startDate
+          )!
+          const prevIsGeneric = ['Reserved', 'Not available', 'Airbnb'].includes(prev.summary)
+          const thisIsReal = !['Reserved', 'Not available', 'Airbnb'].includes(r.summary)
+          if (thisIsReal && prevIsGeneric) {
+            // Replace prev with this one
+            const prevIdx = arr.indexOf(prev)
+            arr[prevIdx] = r
+          }
+          return false
+        })
+
+      const reservations = deduped
 
       for (let i = 0; i < reservations.length; i++) {
         const reservation = reservations[i]
