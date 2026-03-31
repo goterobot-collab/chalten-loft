@@ -33,9 +33,9 @@ export async function addCheckInEvent(params: EventParams) {
 export async function addCheckOutEvent(params: EventParams) {
   const freeLabel = params.freeDaysAfter != null
     ? params.freeDaysAfter === 0
-      ? '⚡0d'
-      : `${params.freeDaysAfter}d libres`
-    : 'libre?'
+      ? '⚡ TURNO INMEDIATO'
+      : `🗓 ${params.freeDaysAfter} día${params.freeDaysAfter === 1 ? '' : 's'} libre${params.freeDaysAfter === 1 ? '' : 's'}`
+    : '🗓 Sin próx. reserva'
 
   const freeDesc = params.freeDaysAfter != null
     ? params.freeDaysAfter === 0
@@ -44,7 +44,7 @@ export async function addCheckOutEvent(params: EventParams) {
     : 'Sin próxima reserva registrada'
 
   return createEvent({
-    summary: `🔴 ${freeLabel} · ${params.propertyName} — ${params.guestName}`,
+    summary: `🔴 ${params.propertyName} · ${freeLabel}`,
     description: `EGRESO + LIMPIEZA\n${formatDescription(params)}\n${freeDesc}`,
     date: params.checkOut,
     colorId: '11', // Tomato red
