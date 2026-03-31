@@ -86,9 +86,15 @@ export async function GET() {
         const end = new Date(checkOut + 'T12:00:00')
         const nights = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24))
 
-        const guestName = reservation.summary === 'Reserved' || reservation.summary === 'Airbnb'
+        const GENERIC = ['Reserved', 'Not available', 'Airbnb', 'Not Available']
+        const guestName = GENERIC.some(g => reservation.summary.includes(g))
           ? 'Huésped Airbnb'
           : reservation.summary
+
+        // Days free after checkout until next booking
+        const freeDaysAfter = nextReservation
+          ? Math.ceil((new Date(nextReservation.startDate + 'T12:00:00').getTime() - new Date(checkOut + 'T12:00:00').getTime()) / (1000 * 60 * 60 * 24))
+          : null
 
         const params: EventParams = {
           propertyName,
@@ -98,6 +104,7 @@ export async function GET() {
           guestName,
           guests: 0,
           nights,
+          freeDaysAfter,
         }
 
         try {
