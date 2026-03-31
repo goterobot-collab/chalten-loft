@@ -18,8 +18,9 @@ function getCalendarClient() {
  * Crea evento de INGRESO (verde) — llega un huésped
  */
 export async function addCheckInEvent(params: EventParams) {
+  const pax = params.guests > 0 ? ` (${params.guests} pax)` : ''
   return createEvent({
-    summary: `🟢 ${params.propertyName} — Ingreso · ${params.guestName}`,
+    summary: `🟢 ${params.propertyName} — Ingreso · ${params.guestName}${pax}`,
     description: `INGRESO\n${formatDescription(params)}`,
     date: params.checkIn,
     colorId: '10', // Basil green

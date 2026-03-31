@@ -3,6 +3,7 @@ import { icalFeeds } from '@/lib/ical-config'
 import { parseICal } from '@/lib/ical-parser'
 import { addCheckInEvent, addCheckOutEvent, addTurnaroundEvent, clearAllEvents } from '@/lib/google-calendar'
 import { properties } from '@/lib/properties'
+import { buildGuestMap } from '@/lib/gmail-reader'
 import type { EventParams } from '@/lib/google-calendar'
 
 // Sync Airbnb → Google Calendar
@@ -13,7 +14,11 @@ import type { EventParams } from '@/lib/google-calendar'
 export async function GET() {
   const today = new Date().toISOString().split('T')[0]
 
-  // Step 1: Borrar todos los eventos existentes para evitar duplicados
+  // Step 1: Cargar datos de huéspedes desde Gmail (guest count real)
+  // Si no están configurados los env vars de Gmail, devuelve mapa vacío sin romper
+  const guestMap = await buildGuestMap().catch(() => new Map())
+
+  // Step 2: Borrar todos los eventos existentes para evitar duplicados
   let deleted = 0
   try {
     deleted = await clearAllEvents()
@@ -96,13 +101,19 @@ export async function GET() {
           ? Math.ceil((new Date(nextReservation.startDate + 'T12:00:00').getTime() - new Date(checkOut + 'T12:00:00').getTime()) / (1000 * 60 * 60 * 24))
           : null
 
+        // Enrich with real guest count from Gmail (fallback to 0 if not found)
+        const gmailKey = `${checkIn}|${checkOut}`
+        const gmailData = guestMap.get(gmailKey)
+        const realGuests = gmailData?.guests ?? 0
+        const realGuestName = gmailData?.guestName || guestName
+
         const params: EventParams = {
           propertyName,
           propertySlug: slug,
           checkIn,
           checkOut,
-          guestName,
-          guests: 0,
+          guestName: realGuestName,
+          guests: realGuests,
           nights,
           freeDaysAfter,
         }
