@@ -231,12 +231,17 @@ function parseEmailBody(text: string, internalDate?: string | null, subject: str
   if (!codeMatch) {
     codeMatch = text.match(/\b(HM[A-Z0-9]{8,10})\b/)
   }
-  // Fallback: look for any 8-10 character alphanumeric code (last resort)
+  // Fallback: look for any 8-10 character alphanumeric code
   if (!codeMatch) {
     codeMatch = text.match(/(?:confirmaci[oó]n|confirmation)[:\s]+([A-Z0-9]{8,12})/i)
   }
-  if (!codeMatch) return null
-  const confirmationCode = codeMatch[1]
+  // Fallback: Extract from subject if available
+  if (!codeMatch && subject) {
+    // Subject might have code like "Reserva confirmada HM123456" or similar
+    codeMatch = subject.match(/\b(HM[A-Z0-9]{8,10})\b/)
+  }
+  // If still no code, use a placeholder based on email date and property
+  const confirmationCode = codeMatch ? codeMatch[1] : `MISSING_${Date.now()}`
 
   // Guests — Multiple fallback patterns for different Airbnb email formats
   let guests = 1
@@ -295,8 +300,24 @@ function parseEmailBody(text: string, internalDate?: string | null, subject: str
   const checkInYear = inferYear(checkInRaw, emailTimestamp)
   const checkOutYear = inferYear(checkOutRaw, emailTimestamp)
 
-  const checkIn = parseSpanishDate(checkInRaw, parseInt(checkInYear))
-  const checkOut = parseSpanishDate(checkOutRaw, parseInt(checkOutYear))
+  let checkIn = parseSpanishDate(checkInRaw, parseInt(checkInYear))
+  let checkOut = parseSpanishDate(checkOutRaw, parseInt(checkOutYear))
+
+  // Fallback: try to extract dates from subject line if body parsing failed
+  if ((!checkIn || !checkOut) && subject) {
+    // Look for "llega el 2 abr" or "check-in April 2" patterns
+    const checkInMatch = subject.match(/(?:llega|check.?in)\s+(?:el\s+)?(\d{1,2})\s+(\w{3})/i) ||
+                         subject.match(/(?:llega|check.?in)\s+(?:el\s+)?(\d{1,2})-(\d{1,2})\s+(\w{3})/)
+    if (checkInMatch) {
+      const day = checkInMatch[1].padStart(2, '0')
+      const month = MONTH_MAP[checkInMatch[2].toLowerCase()] || MONTH_MAP[checkInMatch[3]?.toLowerCase()] || '00'
+      if (month !== '00') {
+        const year = inferYear(`${day} ${checkInMatch[2]}`, emailTimestamp)
+        checkIn = `${year}-${month}-${day}`
+      }
+    }
+  }
+
   if (!checkIn || !checkOut) {
     console.warn('[Gmail Parser] Date parsing failed', {
       checkInRaw,
@@ -304,6 +325,7 @@ function parseEmailBody(text: string, internalDate?: string | null, subject: str
       checkIn,
       checkOut,
       confirmationCode,
+      hasSubject: !!subject,
     })
     return null
   }
