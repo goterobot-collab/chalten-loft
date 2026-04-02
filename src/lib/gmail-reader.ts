@@ -365,9 +365,16 @@ function parseEmailBody(text: string, internalDate?: string | null, subject: str
   // Pattern 4: Extract from subject line as fallback
   // Subject format: "Reserva confirmada: Dario Premat llega el 2 abr" or "Confirmation: John Doe check in..."
   if (!rawName && subject) {
-    let subjectMatch = subject.match(/(?:reserva\s+confirmada|confirmation)[:\s]+([A-Za-zÁÉÍÓÚáéíóúñÑ]+(?:\s+[A-Za-zÁÉÍÓÚáéíóúñÑ]+)?)/i)
+    // Try to extract name between "confirmada:" and "llega"/"check"/"el"
+    let subjectMatch = subject.match(/(?:reserva\s+)?confirmada[:\s]+(.+?)(?:\s+(?:llega|check|el|the|para|a las))/i)
+    if (!subjectMatch) {
+      // Fallback: just take everything between confirmada: and any known delimiter
+      subjectMatch = subject.match(/confirmada[:\s]+(.+?)(?:\s+\d|$)/i)
+    }
     if (subjectMatch) {
-      rawName = subjectMatch[1].trim()
+      const extracted = subjectMatch[1].trim()
+      // Clean up common unwanted additions
+      rawName = extracted.replace(/\s*\(.*?\)/, '').trim()
     }
   }
 
