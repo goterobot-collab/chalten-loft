@@ -86,6 +86,11 @@ export async function fetchAirbnbGuestData(): Promise<GuestData[]> {
     }
   }
 
+  // Log if we didn't find any emails at all
+  if (results.length === 0 && messages.length > 0) {
+    console.warn('[Gmail Parser] Found', messages.length, 'emails but failed to parse all of them')
+  }
+
   return results
 }
 
@@ -216,8 +221,16 @@ function parseEmailBody(text: string, internalDate?: string | null): GuestData |
 
   const emailTimestamp = internalDate ? parseInt(internalDate) : Date.now()
 
-  // Confirmation code — matches "CÓDIGO DE CONFIRMACIÓN\nHMRR4XZNJX" (case-insensitive)
-  const codeMatch = text.match(/c[oó]digo\s+de\s+confirmaci[oó]n\s+([A-Z0-9]{6,12})/i)
+  // Confirmation code — multiple patterns to handle different email formats
+  let codeMatch = text.match(/c[oó]digo\s+de\s+confirmaci[oó]n[\s:]+([A-Z0-9]{6,12})/i)
+  // Fallback: look for pattern like "HM[6+ alphanumeric]" anywhere
+  if (!codeMatch) {
+    codeMatch = text.match(/\b(HM[A-Z0-9]{8,10})\b/)
+  }
+  // Fallback: look for any 8-10 character alphanumeric code (last resort)
+  if (!codeMatch) {
+    codeMatch = text.match(/(?:confirmaci[oó]n|confirmation)[:\s]+([A-Z0-9]{8,12})/i)
+  }
   if (!codeMatch) return null
   const confirmationCode = codeMatch[1]
 
