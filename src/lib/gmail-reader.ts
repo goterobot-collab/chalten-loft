@@ -62,7 +62,11 @@ export async function fetchAirbnbGuestData(): Promise<GuestData[]> {
     try {
       const full = result.value
       const bodyText = extractBody(full.data.payload)
-      const guest = parseEmailBody(bodyText, full.data.internalDate)
+      // Extract subject from email headers
+      const headers = full.data.payload?.headers || []
+      const subjectHeader = headers.find((h: any) => h.name === 'Subject')
+      const subject = subjectHeader?.value || ''
+      const guest = parseEmailBody(bodyText, full.data.internalDate, subject)
       if (guest) {
         results.push(guest)
       } else {
@@ -216,7 +220,7 @@ function inferYear(dateStr: string, emailTimestamp: number): string {
   return String(emailYear)
 }
 
-function parseEmailBody(text: string, internalDate?: string | null): GuestData | null {
+function parseEmailBody(text: string, internalDate?: string | null, subject: string = ''): GuestData | null {
   if (!text) return null
 
   const emailTimestamp = internalDate ? parseInt(internalDate) : Date.now()
@@ -326,6 +330,15 @@ function parseEmailBody(text: string, internalDate?: string | null): GuestData |
     nameMatch = text.match(/(?:viajero\s+principal|hu[eé]sped)[:\s]+(.+?)(?:\s+\(|$)/i)
     if (nameMatch) {
       rawName = nameMatch[1].trim()
+    }
+  }
+
+  // Pattern 4: Extract from subject line as fallback
+  // Subject format: "Reserva confirmada: Dario Premat llega el 2 abr" or "Confirmation: John Doe check in..."
+  if (!rawName && subject) {
+    let subjectMatch = subject.match(/(?:reserva\s+confirmada|confirmation)[:\s]+([A-Za-zÁÉÍÓÚáéíóúñÑ]+(?:\s+[A-Za-zÁÉÍÓÚáéíóúñÑ]+)?)/i)
+    if (subjectMatch) {
+      rawName = subjectMatch[1].trim()
     }
   }
 
