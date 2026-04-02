@@ -7,7 +7,10 @@
     "properties": "숙소",
     "about": "소개",
     "contact": "문의",
-    "bookDirect": "직접 예약"
+    "bookDirect": "직접 예약",
+    "trekking": "트레킹",
+    "gastronomia": "맛집 가이드",
+    "recomendaciones": "여행 팁"
   },
   "home": {
     "heroTagline": "산이 당신의 문 앞에서 시작되는 곳.",

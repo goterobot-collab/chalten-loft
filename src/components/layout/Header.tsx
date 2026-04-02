@@ -38,6 +38,24 @@ export default function Header() {
               {t('properties')}
             </Link>
             <Link
+              href="/trekking"
+              className="text-sm font-medium text-dark/70 hover:text-primary transition-colors"
+            >
+              {t('trekking')}
+            </Link>
+            <Link
+              href="/gastronomia"
+              className="text-sm font-medium text-dark/70 hover:text-primary transition-colors"
+            >
+              {t('gastronomia')}
+            </Link>
+            <Link
+              href="/recomendaciones"
+              className="text-sm font-medium text-dark/70 hover:text-primary transition-colors"
+            >
+              {t('recomendaciones')}
+            </Link>
+            <Link
               href="/about"
               className="text-sm font-medium text-dark/70 hover:text-primary transition-colors"
             >
@@ -79,6 +97,27 @@ export default function Header() {
               className="block text-lg font-medium text-dark/80 hover:text-primary transition-colors py-2"
             >
               {t('properties')}
+            </Link>
+            <Link
+              href="/trekking"
+              onClick={() => setMobileOpen(false)}
+              className="block text-lg font-medium text-dark/80 hover:text-primary transition-colors py-2"
+            >
+              {t('trekking')}
+            </Link>
+            <Link
+              href="/gastronomia"
+              onClick={() => setMobileOpen(false)}
+              className="block text-lg font-medium text-dark/80 hover:text-primary transition-colors py-2"
+            >
+              {t('gastronomia')}
+            </Link>
+            <Link
+              href="/recomendaciones"
+              onClick={() => setMobileOpen(false)}
+              className="block text-lg font-medium text-dark/80 hover:text-primary transition-colors py-2"
+            >
+              {t('recomendaciones')}
             </Link>
             <Link
               href="/about"

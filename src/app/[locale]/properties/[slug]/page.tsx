@@ -24,6 +24,89 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
+const valijeroT = {
+  es: {
+    title: '🧳 Valijero — Guarda Equipaje',
+    desc: 'Para su comodidad, tenemos un valijero a su disposición, a la izquierda de la propiedad, donde podrán dejar su equipaje.',
+    items: [
+      'Este espacio es compartido con el resto de los huéspedes de la propiedad.',
+      'El código de acceso es 0000.',
+      'Siéntase libre de utilizarlo al ingreso y al egreso del loft.',
+    ],
+    warning: 'Por favor, NO SE LLEVE la llave que abre el valijero. 🔑 Es de uso compartido. ¡Gracias!',
+  },
+  en: {
+    title: '🧳 Luggage Storage',
+    desc: 'For your convenience, there is a luggage locker available to you on the left side of the property, where you can leave your bags.',
+    items: [
+      'This storage space is shared with other guests at the property.',
+      'The access code is 0000.',
+      'Feel free to use it when checking in or checking out of the loft.',
+    ],
+    warning: 'Please do NOT take the key that opens the locker. 🔑 It is shared by all guests. Thank you!',
+  },
+  pt: {
+    title: '🧳 Guarda-Volumes',
+    desc: 'Para sua comodidade, temos um armário de bagagem à sua disposição, à esquerda da propriedade, onde você pode deixar suas malas.',
+    items: [
+      'Este espaço é compartilhado com os outros hóspedes da propriedade.',
+      'O código de acesso é 0000.',
+      'Sinta-se à vontade para usá-lo na entrada e na saída do loft.',
+    ],
+    warning: 'Por favor, NÃO LEVE a chave que abre o armário. 🔑 É de uso compartilhado. Obrigado!',
+  },
+  fr: {
+    title: '🧳 Consigne à Bagages',
+    desc: 'Pour votre confort, une consigne à bagages est à votre disposition sur le côté gauche de la propriété, où vous pouvez laisser vos bagages.',
+    items: [
+      'Cet espace est partagé avec les autres clients de la propriété.',
+      'Le code d\'accès est 0000.',
+      'N\'hésitez pas à l\'utiliser à l\'arrivée et au départ du loft.',
+    ],
+    warning: 'Veuillez NE PAS emporter la clé qui ouvre la consigne. 🔑 Elle est partagée par tous les clients. Merci !',
+  },
+  de: {
+    title: '🧳 Gepäckaufbewahrung',
+    desc: 'Für Ihre Bequemlichkeit steht Ihnen links neben dem Eingang ein Gepäckschrank zur Verfügung, in dem Sie Ihr Gepäck abstellen können.',
+    items: [
+      'Dieser Bereich ist mit den anderen Gästen der Unterkunft geteilt.',
+      'Der Zugangscode ist 0000.',
+      'Nutzen Sie ihn gerne bei An- und Abreise vom Loft.',
+    ],
+    warning: 'Bitte nehmen Sie den Schlüssel NICHT mit. 🔑 Er wird von allen Gästen genutzt. Danke!',
+  },
+  ko: {
+    title: '🧳 수하물 보관함',
+    desc: '편의를 위해 숙소 왼쪽에 수하물 보관함이 마련되어 있습니다. 짐을 맡기실 수 있습니다.',
+    items: [
+      '이 공간은 다른 투숙객들과 공유됩니다.',
+      '비밀번호는 0000입니다.',
+      '체크인 및 체크아웃 시 자유롭게 이용하세요.',
+    ],
+    warning: '보관함 열쇠를 가져가지 마세요. 🔑 모든 투숙객이 함께 사용합니다. 감사합니다!',
+  },
+  ja: {
+    title: '🧳 荷物預かりロッカー',
+    desc: 'ご便宜のために、物件の左側に荷物を預けられるロッカーをご用意しています。',
+    items: [
+      'このスペースは他のゲストと共有されます。',
+      'アクセスコードは0000です。',
+      'チェックイン・チェックアウト時にご自由にお使いください。',
+    ],
+    warning: 'ロッカーの鍵はお持ち帰りにならないでください。🔑 他のゲストと共有するものです。ありがとうございます！',
+  },
+  zh: {
+    title: '🧳 行李寄存',
+    desc: '为方便您，我们在房产左侧提供行李柜供您使用，您可以将行李存放于此。',
+    items: [
+      '该空间与房产内其他住客共用。',
+      '访问密码为 0000。',
+      '请在入住和退房时随时使用。',
+    ],
+    warning: '请勿带走行李柜的钥匙。🔑 该钥匙供所有住客共用。谢谢！',
+  },
+}
+
 const amenityIcons: Record<string, React.ReactNode> = {
   kitchen: <CookingPot className="w-5 h-5" />,
   wifi: <Wifi className="w-5 h-5" />,
@@ -121,6 +204,35 @@ export default async function PropertyPage({ params }: Props) {
                       <span className="text-sm text-dark/80">{t(amenity)}</span>
                     </div>
                   ))}
+                </div>
+              </div>
+
+              {/* Luggage Storage — Valijero */}
+              <div className="border-t border-surface pt-10">
+                <h2 className="font-heading text-2xl text-primary mb-6">
+                  {valijeroT[locale as keyof typeof valijeroT]?.title ?? valijeroT.en.title}
+                </h2>
+                <div className="rounded-2xl border border-surface bg-surface/30 p-6 space-y-4">
+                  <div className="flex items-start gap-3">
+                    <Luggage className="w-5 h-5 text-primary mt-0.5 shrink-0" />
+                    <p className="text-dark/75 leading-relaxed text-sm">
+                      {valijeroT[locale as keyof typeof valijeroT]?.desc ?? valijeroT.en.desc}
+                    </p>
+                  </div>
+                  <ul className="space-y-2 pl-8">
+                    {(valijeroT[locale as keyof typeof valijeroT]?.items ?? valijeroT.en.items).map((item: string, i: number) => (
+                      <li key={i} className="flex items-start gap-2 text-sm text-dark/70">
+                        <span className="text-primary mt-0.5">•</span>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="flex items-start gap-3 bg-amber-50 border border-amber-200 rounded-xl p-4 mt-2">
+                    <span className="text-lg shrink-0">⚠️</span>
+                    <p className="text-sm font-medium text-amber-800">
+                      {valijeroT[locale as keyof typeof valijeroT]?.warning ?? valijeroT.en.warning}
+                    </p>
+                  </div>
                 </div>
               </div>
 

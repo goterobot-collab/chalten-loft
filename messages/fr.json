@@ -7,7 +7,10 @@
     "properties": "Hébergements",
     "about": "À propos",
     "contact": "Contact",
-    "bookDirect": "Réserver Direct"
+    "bookDirect": "Réserver Direct",
+    "trekking": "Trekking",
+    "gastronomia": "Gastronomie",
+    "recomendaciones": "Conseils"
   },
   "home": {
     "heroTagline": "Là où les montagnes commencent à votre porte.",

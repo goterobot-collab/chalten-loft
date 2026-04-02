@@ -34,42 +34,87 @@ export async function fetchAirbnbGuestData(): Promise<GuestData[]> {
   const gmail = getGmailClient()
   const results: GuestData[] = []
 
+  // Limit to recent emails (2 years) — older ones are for past bookings we don't need
   const search = await gmail.users.messages.list({
     userId: 'me',
-    q: 'reserva confirmada',
-    maxResults: 500,
+    q: '"Código de confirmación" newer_than:730d',
+    maxResults: 200,
   })
 
   const messages = search.data.messages || []
 
-  for (const msg of messages) {
-    if (!msg.id) continue
-    try {
-      const full = await gmail.users.messages.get({
-        userId: 'me',
-        id: msg.id,
-        format: 'full',
-      })
+  // Fetch all messages in parallel for speed
+  const fetched = await Promise.allSettled(
+    messages
+      .filter(msg => !!msg.id)
+      .map(msg =>
+        gmail.users.messages.get({
+          userId: 'me',
+          id: msg.id!,
+          format: 'full',
+        })
+      )
+  )
 
+  for (const result of fetched) {
+    if (result.status !== 'fulfilled') continue
+    try {
+      const full = result.value
       const bodyText = extractBody(full.data.payload)
       const guest = parseEmailBody(bodyText, full.data.internalDate)
-      if (guest) results.push(guest)
-    } catch {
+      if (guest) {
+        results.push(guest)
+      } else {
+        // Log failed parse attempts for debugging
+        if (bodyText && bodyText.length > 0) {
+          const hasCodigo = bodyText.match(/c[oó]digo\s+de\s+confirmaci[oó]n/i)
+          // Only log if it looks like an Airbnb email but failed to parse
+          if (hasCodigo) {
+            console.warn('[Gmail Parser] Email with confirmation code failed to parse', {
+              hasLlegada: !!bodyText.match(/llegada/i),
+              hasSalida: !!bodyText.match(/salida/i),
+              hasViajeros: !!bodyText.match(/viajeros/i),
+              bodySample: bodyText.substring(0, 200),
+            })
+          }
+        }
+      }
+    } catch (err) {
       // Skip emails that fail to parse
+      console.warn('[Gmail Parser] Error parsing email:', err instanceof Error ? err.message : String(err))
     }
   }
 
   return results
 }
 
-// ── Build a map keyed by checkIn|checkOut for quick lookup ──────────────────
+// ── Derive property slug from email property name ─────────────────────────
+
+export function propertyToSlug(propertyListing: string): string {
+  const lower = propertyListing.toLowerCase()
+  // "CHALTÉN LOFT / DPTO2", "CHALTÉN LOFT/ DPTO. 2", etc.
+  const dptoMatch = lower.match(/dpto\.?\s*(\d)/)
+  if (dptoMatch) {
+    if (dptoMatch[1] === '1') return 'chalten-loft-fitz-roy'
+    if (dptoMatch[1] === '2') return 'chalten-loft-cerro-torre'
+    if (dptoMatch[1] === '3') return 'chalten-loft-poincenot'
+  }
+  // "1- CHALTÉN LOFT", "CHALTÉN LOFT 1"
+  if (/\b1\b/.test(lower) || lower.startsWith('1')) return 'chalten-loft-fitz-roy'
+  if (/\b2\b/.test(lower)) return 'chalten-loft-cerro-torre'
+  if (/\b3\b/.test(lower)) return 'chalten-loft-poincenot'
+  return 'chalten-loft-fitz-roy'
+}
+
+// ── Build a map keyed by slug|checkIn|checkOut for quick lookup ───────────
 
 export async function buildGuestMap(): Promise<Map<string, GuestData>> {
   const guests = await fetchAirbnbGuestData()
   const map = new Map<string, GuestData>()
 
   for (const g of guests) {
-    const key = `${g.checkIn}|${g.checkOut}`
+    const slug = propertyToSlug(g.propertyListing)
+    const key = `${slug}|${g.checkIn}|${g.checkOut}`
     // Keep the most recent email if duplicates exist
     const existing = map.get(key)
     if (!existing || g.emailDate > existing.emailDate) {
@@ -169,35 +214,116 @@ function parseEmailBody(text: string, internalDate?: string | null): GuestData |
   if (!text) return null
 
   const emailTimestamp = internalDate ? parseInt(internalDate) : Date.now()
-  const emailYear = new Date(emailTimestamp).getFullYear()
 
-  // Confirmation code
-  const codeMatch = text.match(/[Cc][oó]digo de confirmaci[oó]n\s+([A-Z0-9]{6,12})/)
+  // Confirmation code — matches "CÓDIGO DE CONFIRMACIÓN\nHMRR4XZNJX" (case-insensitive)
+  const codeMatch = text.match(/c[oó]digo\s+de\s+confirmaci[oó]n\s+([A-Z0-9]{6,12})/i)
   if (!codeMatch) return null
   const confirmationCode = codeMatch[1]
 
-  // Viajeros
-  const viajerosMatch = text.match(/Viajeros\s+(\d+)\s+adulto/)
-  const guests = viajerosMatch ? parseInt(viajerosMatch[1]) : 1
+  // Guests — Multiple fallback patterns for different Airbnb email formats
+  let guests = 1
 
-  // Dates — find after "Llegada" and "Salida" labels
-  const llegadaMatch = text.match(/Llegada\s+([\w,]+\s+\d{1,2}\s+\w{3})/)
-  const salidaMatch = text.match(/Salida\s+([\w,]+\s+\d{1,2}\s+\w{3})/)
-  if (!llegadaMatch || !salidaMatch) return null
+  // Pattern 1: "VIAJEROS\n2 adultos" (most common in Spanish Airbnb)
+  let match = text.match(/viajeros\s*[\n\r]?\s*(\d+)\s+adultos?/i)
+  if (match) {
+    guests = parseInt(match[1])
+  }
 
-  const checkInYear = inferYear(llegadaMatch[1], emailTimestamp)
-  const checkOutYear = inferYear(salidaMatch[1], emailTimestamp)
+  // Pattern 2: "X adulto" without "viajeros"
+  if (guests === 1) {
+    match = text.match(/(\d+)\s+adultos?/i)
+    if (match) {
+      guests = parseInt(match[1])
+    }
+  }
 
-  const checkIn = parseSpanishDate(llegadaMatch[1], parseInt(checkInYear))
-  const checkOut = parseSpanishDate(salidaMatch[1], parseInt(checkOutYear))
-  if (!checkIn || !checkOut) return null
+  // Pattern 3: "Huéspedes: X" or "Grupo de X"
+  if (guests === 1) {
+    match = text.match(/(?:hu[eé]spedes?|grupo\s+de)[\s:]+(\d+)/i)
+    if (match) {
+      guests = parseInt(match[1])
+    }
+  }
 
-  // Guest name — "¡Nueva reserva confirmada! [Name] llega"
-  const nameMatch = text.match(/[Nn]ueva reserva confirmada[!.]?\s+(.+?)\s+llega/)
-  const guestName = nameMatch ? nameMatch[1].trim() : ''
+  // Pattern 4: Look for "X person" or "X people" (English format)
+  if (guests === 1) {
+    match = text.match(/(\d+)\s+(?:person|people|guest)/i)
+    if (match) {
+      guests = parseInt(match[1])
+    }
+  }
 
-  // Property listing name
-  const propMatch = text.match(/(\d+[-–]\s*Chaltén Loft[^\n\r]*)/)
+  // Dates — Airbnb emails show dates in a table:
+  // "Llegada       Salida\n\njue, 17 dic   mar, 22 dic"
+  // Both dates appear on the SAME line after the column headers
+  let checkInRaw = ''
+  let checkOutRaw = ''
+
+  const datesOnSameLine = text.match(
+    /Llegada[\s\S]{0,300}?Salida[\s\S]{0,200}?([\w]+,\s+\d{1,2}\s+\w{3})\s+([\w]+,\s+\d{1,2}\s+\w{3})/i
+  )
+  if (datesOnSameLine) {
+    checkInRaw = datesOnSameLine[1]
+    checkOutRaw = datesOnSameLine[2]
+  } else {
+    // Fallback: dates on separate lines
+    const llegadaMatch = text.match(/Llegada\s+([\w,]+\s+\d{1,2}\s+\w{3})/i)
+    const salidaMatch = text.match(/Salida\s+([\w,]+\s+\d{1,2}\s+\w{3})/i)
+    if (!llegadaMatch || !salidaMatch) return null
+    checkInRaw = llegadaMatch[1]
+    checkOutRaw = salidaMatch[1]
+  }
+
+  const checkInYear = inferYear(checkInRaw, emailTimestamp)
+  const checkOutYear = inferYear(checkOutRaw, emailTimestamp)
+
+  const checkIn = parseSpanishDate(checkInRaw, parseInt(checkInYear))
+  const checkOut = parseSpanishDate(checkOutRaw, parseInt(checkOutYear))
+  if (!checkIn || !checkOut) {
+    console.warn('[Gmail Parser] Date parsing failed', {
+      checkInRaw,
+      checkOutRaw,
+      checkIn,
+      checkOut,
+      confirmationCode,
+    })
+    return null
+  }
+
+  // Guest name — Multiple patterns to handle different Airbnb email formats
+  let rawName = ''
+
+  // Pattern 1: "¡NUEVA RESERVA CONFIRMADA! GASTON LLEGA EL..." (most common)
+  let nameMatch = text.match(/nueva\s+reserva\s+confirmada[!.]?\s+(.+?)\s+llega/i)
+  if (nameMatch) {
+    rawName = nameMatch[1].trim()
+  }
+
+  // Pattern 2: "NUEVA RESERVA DE [NAME]" or just "[NAME] ha hecho una reserva"
+  if (!rawName) {
+    nameMatch = text.match(/nueva\s+reserva\s+(?:de|confirmada)?\s+(.+?)(?:\s+(?:ha|llega|está|en|del)|\s*$)/i)
+    if (nameMatch) {
+      rawName = nameMatch[1].trim()
+    }
+  }
+
+  // Pattern 3: Look for name after "Viajero principal:" or "Huésped:"
+  if (!rawName) {
+    nameMatch = text.match(/(?:viajero\s+principal|hu[eé]sped)[:\s]+(.+?)(?:\s+\(|$)/i)
+    if (nameMatch) {
+      rawName = nameMatch[1].trim()
+    }
+  }
+
+  // Normalize ALL-CAPS names: "GASTON PAZ" → "Gaston Paz", handles Unicode accents (É→é)
+  const guestName = rawName === rawName.toUpperCase() && rawName.length > 0
+    ? rawName.split(' ').map(w => w.length > 0 ? w.charAt(0).toUpperCase() + w.slice(1).toLowerCase() : '').join(' ').trim()
+    : rawName
+
+  // Property listing — "CHALTÉN LOFT / DPTO2" or "1- Chaltén Loft..."
+  const propMatch = text.match(/(\d+[-–]\s*chalt[eé]n\s+loft[^\n\r]*)/i)
+    ?? text.match(/(chalt[eé]n\s+loft\s*\/?\s*dpto\s*\d+[^\n\r]*)/i)
+    ?? text.match(/(chalt[eé]n\s+loft[^\n\r]{0,30})/i)
   const propertyListing = propMatch ? propMatch[1].trim() : ''
 
   return {

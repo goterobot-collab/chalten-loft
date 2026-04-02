@@ -7,7 +7,10 @@
     "properties": "Unterkünfte",
     "about": "Über uns",
     "contact": "Kontakt",
-    "bookDirect": "Direkt Buchen"
+    "bookDirect": "Direkt Buchen",
+    "trekking": "Wandern",
+    "gastronomia": "Gastronomie",
+    "recomendaciones": "Reisetipps"
   },
   "home": {
     "heroTagline": "Wo die Berge vor Ihrer Tür beginnen.",

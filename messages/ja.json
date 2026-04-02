@@ -7,7 +7,10 @@
     "properties": "宿泊施設",
     "about": "概要",
     "contact": "お問い合わせ",
-    "bookDirect": "直接予約"
+    "bookDirect": "直接予約",
+    "trekking": "トレッキング",
+    "gastronomia": "グルメガイド",
+    "recomendaciones": "旅のヒント"
   },
   "home": {
     "heroTagline": "山があなたのドアの前から始まる場所。",

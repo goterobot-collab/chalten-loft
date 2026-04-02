@@ -9,11 +9,16 @@ const resend = new Resend(process.env.RESEND_API_KEY)
 // Also sends a morning summary to Tania at 7am
 
 export async function GET() {
-  const tomorrow = new Date()
+  // Use Argentina time (UTC-3) for date calculations.
+  // Cron runs at 00:00 UTC = 21:00 Argentina the previous day.
+  // "tomorrow Argentina" = the same calendar date as UTC today.
+  const ARG_OFFSET_MS = 3 * 60 * 60 * 1000 // UTC-3
+  const argNow = new Date(Date.now() - ARG_OFFSET_MS)
+  const tomorrow = new Date(argNow)
   tomorrow.setDate(tomorrow.getDate() + 1)
   const tomorrowStr = tomorrow.toISOString().split('T')[0]
 
-  const today = new Date().toISOString().split('T')[0]
+  const today = argNow.toISOString().split('T')[0]
 
   // Get cleaning tasks for tomorrow that haven't been notified
   const { data: tasks } = await supabase
@@ -53,7 +58,7 @@ export async function GET() {
     try {
       await resend.emails.send({
         from: 'Chaltén Loft <onboarding@resend.dev>',
-        to: ['chaltenloft@gmail.com', 'taniayeminagarrido@gmail.com'],
+        to: ['chaltenloft@gmail.com', 'taniayeminagarrido@gmail.com', 'gabrieloterounpa@gmail.com'],
         subject: `🧹 Limpieza mañana — ${task.property_name}`,
         html: `
           <div style="font-family: system-ui, sans-serif; padding: 20px;">

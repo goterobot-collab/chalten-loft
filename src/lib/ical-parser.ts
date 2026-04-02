@@ -5,6 +5,9 @@ export type CalendarEvent = {
   endDate: string   // YYYY-MM-DD
   isReserved: boolean
   reservationId?: string
+  description?: string // Raw description from iCal
+  guestCount?: number // Parsed from description if available
+  guestName?: string // Parsed from description if available (fallback when summary is generic)
 }
 
 function parseICalDate(dateStr: string): string {
@@ -31,11 +34,38 @@ export function parseICal(icalText: string): CalendarEvent[] {
         summary.toLowerCase().includes('not available') ||
         summary.toLowerCase().includes('airbnb')
 
-      // Extract reservation ID from description URL
+      // Extract reservation ID, guest count, and guest name from description
       let reservationId: string | undefined
-      if (descMatch) {
-        const idMatch = descMatch[1].match(/details\/(\w+)/)
+      let guestCount: number | undefined
+      let guestName: string | undefined
+      const description = descMatch?.[1]?.trim()
+
+      if (description) {
+        const idMatch = description.match(/details\/(\w+)/)
         reservationId = idMatch?.[1]
+
+        // Try to extract guest count from description
+        // Patterns: "2 guests", "2 guests", "2 huéspedes", "Grupo de 2"
+        const guestMatch = description.match(/(\d+)\s+(?:guests?|huéspedes?|personas?|people)/i) ||
+                          description.match(/grupo\s+de\s+(\d+)/i)
+        if (guestMatch) {
+          guestCount = parseInt(guestMatch[1])
+        }
+
+        // Try to extract guest name from description
+        // Patterns: "Guest: John Smith", "Huésped: Maria", "huéspedes de Dario", "de Dario", "Guest name: Sarah"
+        let nameMatch = description.match(/(?:guests?|hu[eé]spedes?|de)\s+([A-Za-zÁÉÍÓÚáéíóúñÑ]+(?:\s+[A-Za-zÁÉÍÓÚáéíóúñÑ]+)?)/i)
+        if (nameMatch) {
+          guestName = nameMatch[1].trim()
+        }
+
+        // Fallback: try "nombre:" or "name:" patterns
+        if (!guestName) {
+          nameMatch = description.match(/(?:nombre|name)\s*:\s*([A-Za-zÁÉÍÓÚáéíóúñÑ]+(?:\s+[A-Za-zÁÉÍÓÚáéíóúñÑ]+)?)/i)
+          if (nameMatch) {
+            guestName = nameMatch[1].trim()
+          }
+        }
       }
 
       events.push({
@@ -44,6 +74,9 @@ export function parseICal(icalText: string): CalendarEvent[] {
         endDate: parseICalDate(endMatch[1]),
         isReserved,
         reservationId,
+        description,
+        guestCount,
+        guestName,
       })
     }
   }

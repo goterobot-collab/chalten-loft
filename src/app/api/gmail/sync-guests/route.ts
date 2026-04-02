@@ -12,23 +12,6 @@ export async function GET() {
   }
 
   try {
-    // Quick diagnostic — test raw search
-    let rawCount = -1
-    let debugError = ''
-    try {
-      const { google } = await import('googleapis')
-      const oauth2 = new google.auth.OAuth2(
-        process.env.GOOGLE_OAUTH_CLIENT_ID?.trim(),
-        process.env.GOOGLE_OAUTH_CLIENT_SECRET?.trim(),
-      )
-      oauth2.setCredentials({ refresh_token: process.env.GOOGLE_GMAIL_REFRESH_TOKEN?.trim() })
-      const gmail = google.gmail({ version: 'v1', auth: oauth2 })
-      const r = await gmail.users.messages.list({ userId: 'me', q: 'reserva confirmada', maxResults: 5 })
-      rawCount = r.data.messages?.length ?? 0
-    } catch (e) {
-      debugError = String(e)
-    }
-
     const guests = await fetchAirbnbGuestData()
 
     // Deduplicate: for same checkIn|checkOut, keep most recent email
@@ -90,8 +73,6 @@ export async function GET() {
 
     return NextResponse.json({
       success: true,
-      rawCount,
-      debugError,
       parsed: guests.length,
       deduped: deduped.size,
       updated,

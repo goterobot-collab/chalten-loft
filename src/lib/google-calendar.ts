@@ -58,11 +58,33 @@ export async function addCheckOutEvent(params: EventParams) {
 
 /**
  * Crea evento de LIMPIEZA entre huéspedes (naranja) — sale uno y entra otro el mismo día
+ * Lo más importante: cuántos ENTRAN (para preparar la limpieza)
  */
-export async function addTurnaroundEvent(params: EventParams & { nextGuestName?: string }) {
+export async function addTurnaroundEvent(params: EventParams & {
+  nextGuestName?: string
+  nextGuests?: number
+  nextCheckIn?: string
+  nextCheckOut?: string
+  nextNights?: number
+}) {
+  const nextPax = params.nextGuests && params.nextGuests > 0 ? params.nextGuests : '?'
+  const outPax = params.guests > 0 ? params.guests : '?'
+
   return createEvent({
-    summary: `🧹 ${params.propertyName} — Limpieza · ${params.guestName}→${params.nextGuestName ?? '?'}`,
-    description: `LIMPIEZA ENTRE HUÉSPEDES\nSale: ${params.guestName}\nEntra: ${params.nextGuestName || 'siguiente huésped'}\n${formatDescription(params)}`,
+    summary: `🧹 ${params.propertyName} — Limpieza · ${params.guestName}→${params.nextGuestName ?? '?'} (${nextPax} pax)`,
+    description: [
+      `⚡ TURNO MISMO DÍA`,
+      ``,
+      `📤 SALE: ${params.guestName} (${outPax} pax)`,
+      `   Check-out: ${params.checkOut}`,
+      ``,
+      `📥 ENTRA: ${params.nextGuestName || '?'} (${nextPax} pax)`,
+      `   Check-in: ${params.nextCheckIn || params.checkOut}`,
+      `   Check-out: ${params.nextCheckOut || '?'}`,
+      `   Estadía: ${params.nextNights ?? '?'} noches`,
+      ``,
+      `Dpto: ${params.propertySlug}`,
+    ].join('\n'),
     date: params.checkOut,
     colorId: '6', // Tangerine/Orange
     reminders: [

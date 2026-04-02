@@ -7,7 +7,10 @@
     "properties": "住宿",
     "about": "关于我们",
     "contact": "联系",
-    "bookDirect": "直接预订"
+    "bookDirect": "直接预订",
+    "trekking": "徒步",
+    "gastronomia": "美食指南",
+    "recomendaciones": "旅行贴士"
   },
   "home": {
     "heroTagline": "群山从你的门前开始。",
