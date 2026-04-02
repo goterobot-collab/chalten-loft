@@ -318,6 +318,13 @@ function parseEmailBody(text: string, internalDate?: string | null, subject: str
     }
   }
 
+  // If we have checkIn but no checkOut, infer checkout as +3 days (reasonable default for Airbnb)
+  if (checkIn && !checkOut) {
+    const checkInDate = new Date(checkIn)
+    checkInDate.setDate(checkInDate.getDate() + 3)
+    checkOut = checkInDate.toISOString().split('T')[0]
+  }
+
   if (!checkIn || !checkOut) {
     console.warn('[Gmail Parser] Date parsing failed', {
       checkInRaw,
