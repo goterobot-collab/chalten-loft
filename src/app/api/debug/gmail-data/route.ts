@@ -1,8 +1,25 @@
 import { NextResponse } from 'next/server'
-import { buildGuestMap } from '@/lib/gmail-reader'
+import { buildGuestMap, fetchRawEmailMeta } from '@/lib/gmail-reader'
 
 // Debug endpoint to see what Gmail data is currently extracted
-export async function GET() {
+// ?raw=1           → show raw subjects/from of ALL emails found (before parsing)
+// ?raw=1&q=QUERY   → use custom Gmail search query
+// ?raw=1&name=dario → filter raw results by subject containing name
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url)
+  const showRaw = searchParams.get('raw') === '1'
+  const customQuery = searchParams.get('q') || undefined
+  const filterName = searchParams.get('name')?.toLowerCase()
+
+  if (showRaw) {
+    const raw = await fetchRawEmailMeta(customQuery)
+    const filtered = filterName
+      ? raw.emails.filter(e => e.subject.toLowerCase().includes(filterName) || e.from.toLowerCase().includes(filterName))
+      : raw.emails
+    return NextResponse.json({ totalFound: raw.totalFound, filtered: filtered.length, emails: filtered })
+  }
+
+  // Original behavior below
   try {
     const guestMap = await buildGuestMap()
 

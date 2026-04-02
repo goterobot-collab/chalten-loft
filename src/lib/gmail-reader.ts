@@ -34,11 +34,11 @@ export async function fetchAirbnbGuestData(): Promise<GuestData[]> {
   const gmail = getGmailClient()
   const results: GuestData[] = []
 
-  // Limit to recent emails - search for ALL Airbnb confirmation emails by content
-  // Searches for emails from any Airbnb domain, excluding spam and trash
+  // Search for ALL Airbnb confirmation emails from any sender
+  // Include archive and all labels, exclude only spam
   const search = await gmail.users.messages.list({
     userId: 'me',
-    q: 'from:airbnb.com -is:spam -is:trash',
+    q: 'from:airbnb.com -is:spam',
     maxResults: 500,
   })
 
@@ -96,6 +96,67 @@ export async function fetchAirbnbGuestData(): Promise<GuestData[]> {
   }
 
   return results
+}
+
+// ── Raw email subjects for debugging ────────────────────────────────────────
+
+export type RawEmailMeta = {
+  subject: string
+  from: string
+  date: string
+  internalDate: string
+  parsed: boolean
+}
+
+export async function fetchRawEmailMeta(query?: string): Promise<{ totalFound: number; emails: RawEmailMeta[] }> {
+  if (!process.env.GOOGLE_OAUTH_CLIENT_ID || !process.env.GOOGLE_GMAIL_REFRESH_TOKEN) {
+    return { totalFound: 0, emails: [] }
+  }
+
+  const gmail = getGmailClient()
+  const q = query || 'from:airbnb.com -is:spam'
+
+  const search = await gmail.users.messages.list({ userId: 'me', q, maxResults: 500 })
+  const messages = search.data.messages || []
+
+  const fetched = await Promise.allSettled(
+    messages
+      .filter(msg => !!msg.id)
+      .slice(0, 300)
+      .map(msg =>
+        gmail.users.messages.get({
+          userId: 'me',
+          id: msg.id!,
+          format: 'metadata',
+          metadataHeaders: ['Subject', 'From', 'Date'],
+        })
+      )
+  )
+
+  // Also get parsed emails to mark which ones succeeded
+  const parsed = await fetchAirbnbGuestData()
+  const parsedCodes = new Set(parsed.map(g => g.confirmationCode))
+
+  const emails: RawEmailMeta[] = fetched
+    .filter(r => r.status === 'fulfilled')
+    .map(r => {
+      const full = (r as PromiseFulfilledResult<any>).value
+      const headers: any[] = full.data.payload?.headers || []
+      const get = (name: string) => headers.find((h: any) => h.name === name)?.value || ''
+      const subject = get('Subject')
+      // Check if this email was successfully parsed (rough check by confirmation code in subject)
+      const codeInSubject = subject.match(/\b(HM[A-Z0-9]{8,10})\b/)?.[1]
+      return {
+        subject,
+        from: get('From'),
+        date: get('Date'),
+        internalDate: full.data.internalDate || '',
+        parsed: codeInSubject ? parsedCodes.has(codeInSubject) : false,
+      }
+    })
+    .sort((a, b) => parseInt(b.internalDate) - parseInt(a.internalDate))
+
+  return { totalFound: messages.length, emails }
 }
 
 // ── Derive property slug from email property name ─────────────────────────
