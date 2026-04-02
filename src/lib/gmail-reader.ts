@@ -1,4 +1,6 @@
 import { google } from 'googleapis'
+import { readFileSync } from 'fs'
+import { join } from 'path'
 
 // ── OAuth2 Gmail client ──────────────────────────────────────────────────────
 // Setup: run scripts/get-gmail-token.mjs once to get GOOGLE_GMAIL_REFRESH_TOKEN
@@ -191,6 +193,36 @@ export async function buildGuestMap(): Promise<Map<string, GuestData>> {
     if (!existing || g.emailDate > existing.emailDate) {
       map.set(key, g)
     }
+  }
+
+  // Merge manual overrides (src/data/guest-overrides.json)
+  // These take priority and fix reservations that Gmail fails to parse
+  try {
+    const overridesPath = join(process.cwd(), 'src', 'data', 'guest-overrides.json')
+    const raw = readFileSync(overridesPath, 'utf-8')
+    const overrides: Array<{
+      slug: string
+      checkIn: string
+      checkOut: string
+      guestName: string
+      guests: number
+      confirmationCode: string
+    }> = JSON.parse(raw)
+
+    for (const o of overrides) {
+      const key = `${o.slug}|${o.checkIn}|${o.checkOut}`
+      map.set(key, {
+        confirmationCode: o.confirmationCode,
+        guestName: o.guestName,
+        checkIn: o.checkIn,
+        checkOut: o.checkOut,
+        guests: o.guests,
+        propertyListing: o.slug,
+        emailDate: new Date().toISOString(),
+      })
+    }
+  } catch {
+    // File doesn't exist or parse error — ignore silently
   }
 
   return map
