@@ -36,12 +36,12 @@ export async function fetchAirbnbGuestData(): Promise<GuestData[]> {
   const gmail = getGmailClient()
   const results: GuestData[] = []
 
-  // Search for ALL Airbnb confirmation emails from any sender
-  // Include archive and all labels, exclude only spam
+  // Search for Airbnb RESERVATION confirmation emails specifically
+  // Narrow query avoids review/notification emails (500→~120 results)
   const search = await gmail.users.messages.list({
     userId: 'me',
-    q: 'from:airbnb.com -is:spam',
-    maxResults: 500,
+    q: 'from:airbnb.com (subject:"Reserva confirmada" OR subject:"Reservation confirmed" OR subject:"confirmada") -is:spam',
+    maxResults: 300,
   })
 
   const messages = search.data.messages || []
