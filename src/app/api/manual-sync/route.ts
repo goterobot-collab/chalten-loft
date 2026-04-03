@@ -150,6 +150,7 @@ export async function GET(req: Request) {
           guests: realGuests,
           nights,
           freeDaysAfter,
+          maxGuests,
         }
 
         try {
