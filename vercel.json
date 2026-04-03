@@ -2,7 +2,7 @@
   "crons": [
     {
       "path": "/api/auto-sync",
-      "schedule": "*/10 * * * *"
+      "schedule": "0 6 * * *"
     },
     {
       "path": "/api/cron/cleaning-notifications",
