@@ -11,13 +11,15 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Brand */}
           <div className="flex items-center gap-3">
-            <Image
-              src="/images/logo.png"
-              alt="Chaltén Loft Patagonia"
-              width={48}
-              height={48}
-              className="rounded-full invert brightness-200"
-            />
+            <div className="w-12 h-12 rounded-full bg-white/10 p-0.5 flex-shrink-0">
+              <Image
+                src="/images/logo.png"
+                alt="Chaltén Loft Patagonia"
+                width={48}
+                height={48}
+                className="rounded-full"
+              />
+            </div>
             <div>
               <h3 className="font-heading text-2xl font-bold text-white mb-0">
                 Chaltén Loft

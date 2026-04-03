@@ -4,6 +4,7 @@ import { Link } from '@/i18n/navigation'
 import { properties, heroImage, chaltenPhotos } from '@/lib/properties'
 import { Users, Bed, Maximize, MapPin, Shield, MessageCircle, Wallet } from 'lucide-react'
 import PhotoCarousel from '@/components/properties/PhotoCarousel'
+import { FadeIn, FadeInView, StaggerFadeIn, StaggerItem, SlideInView } from '@/components/ui/animations'
 
 type Props = {
   params: Promise<{ locale: string }>
@@ -33,17 +34,24 @@ export default async function HomePage({ params }: Props) {
 
         <div className="relative z-10 text-center text-white max-w-5xl mx-auto px-4">
           {/* Tagline — Das Wanda manifesto style */}
-          <p className="text-sm sm:text-base uppercase tracking-[0.3em] text-white/70 mb-6">
-            {t('location')}
-          </p>
-          <h1 className="font-heading text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold mb-8 leading-[0.95]">
-            {t('heroTagline')}
-          </h1>
-          <p className="text-lg sm:text-xl text-white/80 mb-12 max-w-2xl mx-auto leading-relaxed">
-            {t('heroSubtitle')}
-          </p>
+          <FadeIn delay={0.1}>
+            <p className="text-sm sm:text-base uppercase tracking-[0.3em] text-white/70 mb-6">
+              {t('location')}
+            </p>
+          </FadeIn>
+          <FadeIn delay={0.25}>
+            <h1 className="font-heading text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold mb-8 leading-[0.95]">
+              {t('heroTagline')}
+            </h1>
+          </FadeIn>
+          <FadeIn delay={0.4}>
+            <p className="text-lg sm:text-xl text-white/80 mb-12 max-w-2xl mx-auto leading-relaxed">
+              {t('heroSubtitle')}
+            </p>
+          </FadeIn>
 
           {/* Booking Widget — Lisboans style, floating glass */}
+          <FadeIn delay={0.55}>
           <div className="bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl p-6 sm:p-8 max-w-3xl mx-auto">
             <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
               <div className="text-left">
@@ -82,6 +90,7 @@ export default async function HomePage({ params }: Props) {
               </div>
             </div>
           </div>
+          </FadeIn>
         </div>
 
         {/* Scroll indicator */}
@@ -100,11 +109,13 @@ export default async function HomePage({ params }: Props) {
           <p className="text-sm uppercase tracking-[0.25em] text-accent font-semibold mb-4">
             ✦
           </p>
-          <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl text-primary mb-20">
-            {t('whyBookDirect')}
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-16">
-            <div className="space-y-4">
+          <FadeInView>
+            <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl text-primary mb-20">
+              {t('whyBookDirect')}
+            </h2>
+          </FadeInView>
+          <StaggerFadeIn className="grid grid-cols-1 md:grid-cols-3 gap-16">
+            <StaggerItem className="space-y-4">
               <div className="w-14 h-14 rounded-2xl bg-accent/10 flex items-center justify-center mx-auto">
                 <Wallet className="w-6 h-6 text-accent" />
               </div>
@@ -114,8 +125,8 @@ export default async function HomePage({ params }: Props) {
               <p className="text-muted leading-relaxed text-[15px]">
                 {t('reason1Desc')}
               </p>
-            </div>
-            <div className="space-y-4">
+            </StaggerItem>
+            <StaggerItem className="space-y-4">
               <div className="w-14 h-14 rounded-2xl bg-accent/10 flex items-center justify-center mx-auto">
                 <MessageCircle className="w-6 h-6 text-accent" />
               </div>
@@ -125,8 +136,8 @@ export default async function HomePage({ params }: Props) {
               <p className="text-muted leading-relaxed text-[15px]">
                 {t('reason2Desc')}
               </p>
-            </div>
-            <div className="space-y-4">
+            </StaggerItem>
+            <StaggerItem className="space-y-4">
               <div className="w-14 h-14 rounded-2xl bg-accent/10 flex items-center justify-center mx-auto">
                 <Shield className="w-6 h-6 text-accent" />
               </div>
@@ -136,8 +147,8 @@ export default async function HomePage({ params }: Props) {
               <p className="text-muted leading-relaxed text-[15px]">
                 {t('reason3Desc')}
               </p>
-            </div>
-          </div>
+            </StaggerItem>
+          </StaggerFadeIn>
         </div>
       </section>
 
@@ -155,10 +166,10 @@ export default async function HomePage({ params }: Props) {
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+          <StaggerFadeIn className="grid grid-cols-1 md:grid-cols-3 gap-10">
             {properties.map((property) => (
+              <StaggerItem key={property.slug}>
               <Link
-                key={property.slug}
                 href={{ pathname: '/properties/[slug]', params: { slug: property.slug } }}
                 className="group"
               >
@@ -214,8 +225,9 @@ export default async function HomePage({ params }: Props) {
                   </div>
                 </div>
               </Link>
+              </StaggerItem>
             ))}
-          </div>
+          </StaggerFadeIn>
         </div>
       </section>
 
@@ -225,7 +237,7 @@ export default async function HomePage({ params }: Props) {
       <section className="py-24 sm:py-32">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div>
+            <SlideInView from="left">
               <p className="text-sm uppercase tracking-[0.25em] text-accent font-semibold mb-4">
                 El Chaltén
               </p>
@@ -237,8 +249,8 @@ export default async function HomePage({ params }: Props) {
                 <p>{t('chaltenP2')}</p>
                 <p>{t('chaltenP3')}</p>
               </div>
-            </div>
-            <div className="space-y-4">
+            </SlideInView>
+            <SlideInView from="right" delay={0.1} className="space-y-4">
               <div className="relative aspect-[4/3] rounded-2xl overflow-hidden">
                 <Image
                   src={chaltenPhotos[0]}
@@ -268,7 +280,7 @@ export default async function HomePage({ params }: Props) {
                   />
                 </div>
               </div>
-            </div>
+            </SlideInView>
           </div>
         </div>
       </section>

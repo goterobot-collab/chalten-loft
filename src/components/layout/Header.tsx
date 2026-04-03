@@ -20,9 +20,9 @@ export default function Header() {
             <Image
               src="/images/logo.png"
               alt="Chaltén Loft Patagonia"
-              width={44}
-              height={44}
-              className="rounded-full mix-blend-multiply"
+              width={40}
+              height={40}
+              className="rounded-full"
             />
             <span className="font-heading text-xl font-bold text-primary tracking-tight hidden sm:inline">
               Chaltén Loft
