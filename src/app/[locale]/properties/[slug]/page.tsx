@@ -6,6 +6,7 @@ import { Users, Bed, Bath, Maximize, Wifi, Car, PawPrint, Tv, CookingPot, Briefc
 import type { Metadata } from 'next'
 import PhotoCarousel from '@/components/properties/PhotoCarousel'
 import AvailabilityCalendar from '@/components/booking/AvailabilityCalendar'
+import { FadeIn, FadeInView, StaggerFadeIn, StaggerItem, SlideInView } from '@/components/ui/animations'
 
 type Props = {
   params: Promise<{ locale: string; slug: string }>
@@ -151,64 +152,69 @@ export default async function PropertyPage({ params }: Props) {
 
               {/* Title + Stats */}
               <div>
-                <h1 className="font-heading text-4xl sm:text-5xl text-primary mb-2">
-                  {property.name}
-                </h1>
-                <p className="font-heading text-2xl text-accent mb-6">
-                  {property.subtitle}
-                </p>
-                <div className="flex flex-wrap items-center gap-6 text-muted">
-                  <span className="flex items-center gap-2">
-                    <Maximize className="w-5 h-5" />
-                    {t('sqm', { count: property.sqm })}
-                  </span>
-                  <span className="flex items-center gap-2">
-                    <Users className="w-5 h-5" />
-                    {th('guestsCount', { count: property.maxGuests })}
-                  </span>
-                  <span className="flex items-center gap-2">
-                    <Bed className="w-5 h-5" />
-                    {t('beds', { count: property.beds })}
-                  </span>
-                  <span className="flex items-center gap-2">
-                    <Bath className="w-5 h-5" />
-                    {t('bathrooms', { count: property.bathrooms })}
-                  </span>
-                </div>
+                <FadeIn delay={0.05}>
+                  <h1 className="font-heading text-4xl sm:text-5xl text-primary mb-2">
+                    {property.name}
+                  </h1>
+                  <p className="font-heading text-2xl text-accent mb-6">
+                    {property.subtitle}
+                  </p>
+                </FadeIn>
+                <FadeIn delay={0.2}>
+                  <div className="flex flex-wrap items-center gap-6 text-muted">
+                    <span className="flex items-center gap-2">
+                      <Maximize className="w-5 h-5" />
+                      {t('sqm', { count: property.sqm })}
+                    </span>
+                    <span className="flex items-center gap-2">
+                      <Users className="w-5 h-5" />
+                      {th('guestsCount', { count: property.maxGuests })}
+                    </span>
+                    <span className="flex items-center gap-2">
+                      <Bed className="w-5 h-5" />
+                      {t('beds', { count: property.beds })}
+                    </span>
+                    <span className="flex items-center gap-2">
+                      <Bath className="w-5 h-5" />
+                      {t('bathrooms', { count: property.bathrooms })}
+                    </span>
+                  </div>
+                </FadeIn>
               </div>
 
               {/* Description — Das Wanda editorial style */}
-              <div className="border-t border-surface pt-10">
+              <FadeInView className="border-t border-surface pt-10">
                 <p className="text-lg leading-relaxed text-dark/80 max-w-2xl">
                   {t('detailDesc1', { sqm: property.sqm })}
                 </p>
                 <p className="text-base leading-relaxed text-muted mt-4 max-w-2xl">
                   {t('detailDesc2')}
                 </p>
-              </div>
+              </FadeInView>
 
               {/* Amenities — grid with icons */}
               <div className="border-t border-surface pt-10">
-                <h2 className="font-heading text-2xl text-primary mb-8">
-                  {t('amenities')}
-                </h2>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-5">
+                <FadeInView>
+                  <h2 className="font-heading text-2xl text-primary mb-8">
+                    {t('amenities')}
+                  </h2>
+                </FadeInView>
+                <StaggerFadeIn className="grid grid-cols-2 sm:grid-cols-3 gap-5" stagger={0.06}>
                   {property.amenities.map((amenity) => (
-                    <div
-                      key={amenity}
-                      className="flex items-center gap-3 p-3 rounded-xl bg-surface/50"
-                    >
-                      <span className="text-accent">
-                        {amenityIcons[amenity] || <span className="w-5 h-5 rounded-full bg-accent/20 block" />}
-                      </span>
-                      <span className="text-sm text-dark/80">{t(amenity)}</span>
-                    </div>
+                    <StaggerItem key={amenity}>
+                      <div className="flex items-center gap-3 p-3 rounded-xl bg-surface/50">
+                        <span className="text-accent">
+                          {amenityIcons[amenity] || <span className="w-5 h-5 rounded-full bg-accent/20 block" />}
+                        </span>
+                        <span className="text-sm text-dark/80">{t(amenity)}</span>
+                      </div>
+                    </StaggerItem>
                   ))}
-                </div>
+                </StaggerFadeIn>
               </div>
 
               {/* Luggage Storage — Valijero */}
-              <div className="border-t border-surface pt-10">
+              <FadeInView className="border-t border-surface pt-10">
                 <h2 className="font-heading text-2xl text-primary mb-6">
                   {valijeroT[locale as keyof typeof valijeroT]?.title ?? valijeroT.en.title}
                 </h2>
@@ -234,19 +240,19 @@ export default async function PropertyPage({ params }: Props) {
                     </p>
                   </div>
                 </div>
-              </div>
+              </FadeInView>
 
               {/* Availability Calendar — connected to Airbnb */}
-              <div className="border-t border-surface pt-10">
+              <FadeInView className="border-t border-surface pt-10">
                 <h2 className="font-heading text-2xl text-primary mb-8">
                   {th('checkAvailability')}
                 </h2>
                 <AvailabilityCalendar propertySlug={property.slug} />
-              </div>
+              </FadeInView>
             </div>
 
             {/* Sidebar — Booking widget sticky */}
-            <div className="lg:col-span-1">
+            <SlideInView from="right" delay={0.15} className="lg:col-span-1">
               <div className="sticky top-24 bg-white rounded-2xl shadow-lg p-7 border border-surface/50">
                 <div className="text-center mb-6">
                   <span className="badge-direct">{th('search')}</span>
@@ -297,7 +303,7 @@ export default async function PropertyPage({ params }: Props) {
                   {t('bookDirectBest')}
                 </p>
               </div>
-            </div>
+            </SlideInView>
           </div>
         </div>
       </section>
