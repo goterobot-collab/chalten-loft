@@ -46,7 +46,7 @@ export async function addCheckOutEvent(params: EventParams) {
 
   return createEvent({
     summary: `🔴 ${params.propertyName} · ${freeLabel}`,
-    description: `EGRESO + LIMPIEZA\n${formatDescription(params)}\n${freeDesc}`,
+    description: `EGRESO + LIMPIEZA\n${formatCheckoutDescription(params)}\n${freeDesc}`,
     date: params.checkOut,
     colorId: '11', // Tomato red
     reminders: [
@@ -148,10 +148,20 @@ export type EventParams = {
   guests: number
   nights: number
   freeDaysAfter?: number | null
+  maxGuests?: number
 }
 
 function formatDescription(params: EventParams): string {
   return `Huésped: ${params.guestName}\nHuéspedes: ${params.guests || '?'}\nEstadía: ${params.nights} noches\nCheck-in: ${params.checkIn}\nCheck-out: ${params.checkOut}\nDpto: ${params.propertySlug}`
+}
+
+function formatCheckoutDescription(params: EventParams): string {
+  const base = formatDescription(params)
+  // When nobody checks in the same day, remind cleaner to prepare for max capacity
+  if (params.maxGuests && params.freeDaysAfter !== 0) {
+    return `${base}\nnotes\nDejar loft para ${params.maxGuests} pax`
+  }
+  return base
 }
 
 async function createEvent(opts: {
