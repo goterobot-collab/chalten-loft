@@ -1,0 +1,23 @@
+name: Auto-sync Airbnb → Calendar
+
+on:
+  schedule:
+    # Every 5 minutes
+    - cron: '*/5 * * * *'
+  workflow_dispatch: # Manual trigger from GitHub UI
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Trigger auto-sync
+        run: |
+          response=$(curl -sf 'https://chalten-loft.vercel.app/api/auto-sync' 2>&1)
+          echo "$response" | python3 -m json.tool 2>/dev/null || echo "$response"
+          synced=$(echo "$response" | python3 -c "import sys,json; print(json.load(sys.stdin).get('synced',False))" 2>/dev/null)
+          if [ "$synced" = "True" ]; then
+            echo "✅ Calendar synced!"
+          else
+            echo "ℹ️ No changes detected"
+          fi
