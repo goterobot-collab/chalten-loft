@@ -46,7 +46,7 @@ export async function addCheckOutEvent(params: EventParams) {
 
   return createEvent({
     summary: `🔴 ${params.propertyName} · ${freeLabel}`,
-    description: `EGRESO + LIMPIEZA\n${formatCheckoutDescription(params)}\n${freeDesc}`,
+    description: `EGRESO + LIMPIEZA\n\n${params.maxGuests ? `Dejar loft para ${params.maxGuests} pax\n` : ''}${freeDesc}`,
     date: params.checkOut,
     colorId: '11', // Tomato red
     reminders: [
