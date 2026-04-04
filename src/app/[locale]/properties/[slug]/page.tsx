@@ -110,6 +110,81 @@ const valijeroT = {
   },
 }
 
+// ── Lo que incluye — detalle por categoría ───────────────────────────────────
+const includedT: Record<string, {
+  title: string
+  kitchen: { title: string; items: string[] }
+  sleep: { title: string; items: string[] }
+  bath: { title: string; items: string[] }
+  extras: { title: string; items: string[] }
+  noSmoke: string
+}> = {
+  es: {
+    title: 'Lo que incluye',
+    kitchen: { title: '🍳 Cocina equipada', items: ['Hornallas vitrocerámicas y horno microondas', 'Refrigerador con congelador y pava eléctrica', 'Cafetera Nespresso y cafetera italiana', 'Utensilios completos, vajilla y mesa para 3–4 personas'] },
+    sleep:   { title: '🛏️ Descanso', items: ['Cama doble + sofá cama o cama doble con luces de lectura (según loft)', 'Ropa de cama de algodón 100%, cortinas blackout', 'Almohadas y mantas adicionales', 'Vista a las montañas'] },
+    bath:    { title: '🚿 Baño', items: ['Ducha con bidet de mano', 'Toallas y toallones incluidos', 'Secador de pelo, shampoo, acondicionador, jabón líquido, papel higiénico'] },
+    extras:  { title: '✨ Extras', items: ['Ingreso privado e independiente', 'Estacionamiento en la vía pública', 'SmartTV, juegos de mesa y biblioteca', 'WiFi 24hs · Calefacción central por radiadores', 'Detector de humo y extintor de incendios', 'Guardaequipaje disponible'] },
+    noSmoke: '🚭 No se permite fumar dentro de la propiedad',
+  },
+  en: {
+    title: "What's included",
+    kitchen: { title: '🍳 Fully equipped kitchen', items: ['Vitroceramic hob and microwave oven', 'Fridge with freezer and electric kettle', 'Nespresso machine and Italian stovetop coffee maker', 'Full utensils, tableware and dining table for 3–4'] },
+    sleep:   { title: '🛏️ Sleep', items: ['Double bed + sofa bed or double bed with reading lights (varies by loft)', '100% cotton bed linen, blackout curtains', 'Extra pillows and blankets', 'Mountain views'] },
+    bath:    { title: '🚿 Bathroom', items: ['Shower with handheld bidet', 'Bath towels and face towels included', 'Hair dryer, shampoo, conditioner, liquid soap, toilet paper'] },
+    extras:  { title: '✨ Extras', items: ['Private and independent entrance', 'Free street parking', 'Smart TV, board games and book library', 'WiFi 24/7 · Central heating via radiators', 'Smoke detector and fire extinguisher', 'Luggage storage available'] },
+    noSmoke: '🚭 No smoking inside the property',
+  },
+  pt: {
+    title: 'O que está incluído',
+    kitchen: { title: '🍳 Cozinha equipada', items: ['Cooktop vitrocerâmico e micro-ondas', 'Geladeira com freezer e chaleira elétrica', 'Cafeteira Nespresso e cafeteira italiana', 'Utensílios completos, louça e mesa para 3–4 pessoas'] },
+    sleep:   { title: '🛏️ Descanso', items: ['Cama de casal + sofá-cama ou cama de casal com luzes de leitura (conforme loft)', 'Roupa de cama 100% algodão, cortinas blackout', 'Travesseiros e mantas adicionais', 'Vista para as montanhas'] },
+    bath:    { title: '🚿 Banheiro', items: ['Chuveiro com ducha higiênica', 'Toalhas de banho e rosto incluídas', 'Secador de cabelo, shampoo, condicionador, sabão líquido, papel higiênico'] },
+    extras:  { title: '✨ Extras', items: ['Entrada privativa e independente', 'Estacionamento na via pública', 'Smart TV, jogos de mesa e biblioteca', 'WiFi 24hs · Aquecimento central por radiadores', 'Detector de fumaça e extintor', 'Guarda-volumes disponível'] },
+    noSmoke: '🚭 Não é permitido fumar dentro da propriedade',
+  },
+  fr: {
+    title: 'Ce qui est inclus',
+    kitchen: { title: '🍳 Cuisine équipée', items: ['Plaques vitrocéramiques et four micro-ondes', 'Réfrigérateur avec congélateur et bouilloire électrique', 'Machine Nespresso et cafetière italienne', 'Ustensiles complets, vaisselle et table pour 3–4 personnes'] },
+    sleep:   { title: '🛏️ Repos', items: ['Lit double + canapé-lit ou lit double avec lampes de lecture (selon le loft)', 'Linge de lit 100% coton, rideaux occultants', 'Oreillers et couvertures supplémentaires', 'Vue sur les montagnes'] },
+    bath:    { title: '🚿 Salle de bain', items: ['Douche avec douchette bidet', 'Serviettes de bain et de toilette incluses', 'Sèche-cheveux, shampooing, après-shampooing, savon liquide, papier toilette'] },
+    extras:  { title: '✨ Extras', items: ['Entrée privée et indépendante', 'Stationnement sur la voie publique', 'Smart TV, jeux de société et bibliothèque', 'WiFi 24h/24 · Chauffage central par radiateurs', 'Détecteur de fumée et extincteur', 'Consigne à bagages disponible'] },
+    noSmoke: '🚭 Il est interdit de fumer à l\'intérieur',
+  },
+  de: {
+    title: 'Inbegriffen',
+    kitchen: { title: '🍳 Voll ausgestattete Küche', items: ['Glaskeramik-Kochfeld und Mikrowelle', 'Kühlschrank mit Gefrierfach und Wasserkocher', 'Nespresso-Maschine und Espressokanne', 'Vollständiges Kochgeschirr, Geschirr und Tisch für 3–4'] },
+    sleep:   { title: '🛏️ Schlafen', items: ['Doppelbett + Schlafsofa oder Doppelbett mit Leselampen (je nach Loft)', '100% Baumwoll-Bettwäsche, Verdunkelungsvorhänge', 'Zusätzliche Kissen und Decken', 'Bergblick'] },
+    bath:    { title: '🚿 Badezimmer', items: ['Dusche mit Handbrause-Bidet', 'Bade- und Handtücher inklusive', 'Haartrockner, Shampoo, Spülung, Flüssigseife, Toilettenpapier'] },
+    extras:  { title: '✨ Extras', items: ['Privater und unabhängiger Eingang', 'Parkplatz auf der Straße', 'Smart TV, Brettspiele und Bibliothek', 'WLAN 24/7 · Zentralheizung über Heizkörper', 'Rauchmelder und Feuerlöscher', 'Gepäckaufbewahrung verfügbar'] },
+    noSmoke: '🚭 Rauchen im Gebäude nicht gestattet',
+  },
+  ko: {
+    title: '포함 사항',
+    kitchen: { title: '🍳 주방 완비', items: ['세라믹 가스레인지 및 전자레인지', '냉동고 포함 냉장고 및 전기 주전자', '네스프레소 머신 및 이탈리아식 커피메이커', '주방용품 완비, 3–4인용 식기 및 식탁'] },
+    sleep:   { title: '🛏️ 수면', items: ['더블 침대 + 소파 침대 또는 독서등이 있는 더블 침대 (로프트에 따라 다름)', '100% 순면 침구, 암막 커튼', '추가 베개 및 담요', '산 전망'] },
+    bath:    { title: '🚿 욕실', items: ['핸드헬드 비데 샤워기', '목욕 및 세면 타월 포함', '헤어드라이어, 샴푸, 컨디셔너, 액체 비누, 화장지'] },
+    extras:  { title: '✨ 기타', items: ['독립적인 개인 출입구', '공공 도로 주차 가능', 'Smart TV, 보드게임 및 도서관', 'WiFi 24시간 · 라디에이터 중앙 난방', '화재 감지기 및 소화기', '수하물 보관 가능'] },
+    noSmoke: '🚭 건물 내 흡연 금지',
+  },
+  ja: {
+    title: '含まれるもの',
+    kitchen: { title: '🍳 完備キッチン', items: ['ガラスセラミックコンロと電子レンジ', '冷凍庫付き冷蔵庫と電気ケトル', 'ネスプレッソマシンとイタリア式コーヒーメーカー', '調理器具完備、3〜4名用の食器とダイニングテーブル'] },
+    sleep:   { title: '🛏️ 睡眠', items: ['ダブルベッド＋ソファベッド、またはダブルベッドとリーディングライト（ロフトにより異なる）', '綿100%のリネン、遮光カーテン', '追加の枕と毛布', '山の眺望'] },
+    bath:    { title: '🚿 バスルーム', items: ['ハンドシャワー付きシャワー', 'バスタオルとフェイスタオル完備', 'ヘアドライヤー、シャンプー、コンディショナー、液体ソープ、トイレットペーパー'] },
+    extras:  { title: '✨ その他', items: ['独立したプライベート入口', '路上駐車可能', 'Smart TV、ボードゲームと書籍', 'WiFi 24時間 · ラジエーター式セントラルヒーティング', '煙感知器と消火器', '荷物預かりサービスあり'] },
+    noSmoke: '🚭 建物内は禁煙です',
+  },
+  zh: {
+    title: '含包项目',
+    kitchen: { title: '🍳 全套厨房', items: ['玻璃陶瓷炉灶和微波炉', '带冷冻室的冰箱和电热水壶', 'Nespresso胶囊咖啡机和意式摩卡壶', '全套厨具、餐具和3–4人餐桌'] },
+    sleep:   { title: '🛏️ 休息', items: ['双人床+沙发床，或带阅读灯的双人床（因loft而异）', '100%纯棉床上用品，遮光窗帘', '额外枕头和毯子', '山景'] },
+    bath:    { title: '🚿 卫生间', items: ['带手持式坐浴盆的淋浴', '浴巾和毛巾已包含', '吹风机、洗发水、护发素、液体皂、卫生纸'] },
+    extras:  { title: '✨ 其他', items: ['独立私人入口', '路边停车', 'Smart TV、桌游和图书馆', 'WiFi 24小时 · 散热器中央供暖', '烟雾探测器和灭火器', '行李寄存服务'] },
+    noSmoke: '🚭 建筑内禁止吸烟',
+  },
+}
+
 const amenityIcons: Record<string, React.ReactNode> = {
   kitchen: <CookingPot className="w-5 h-5" />,
   wifi: <Wifi className="w-5 h-5" />,
@@ -193,6 +268,32 @@ export default async function PropertyPage({ params }: Props) {
                   {t('detailDesc2')}
                 </p>
               </FadeInView>
+
+              {/* Lo que incluye — detalle por categoría */}
+              {(() => {
+                const inc = includedT[locale] ?? includedT.en
+                return (
+                  <FadeInView className="border-t border-surface pt-10">
+                    <h2 className="font-heading text-2xl text-primary mb-8">{inc.title}</h2>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                      {[inc.kitchen, inc.sleep, inc.bath, inc.extras].map((cat) => (
+                        <div key={cat.title} className="rounded-2xl bg-surface/40 p-5">
+                          <p className="font-semibold text-dark mb-3 text-sm">{cat.title}</p>
+                          <ul className="space-y-1.5">
+                            {cat.items.map((item) => (
+                              <li key={item} className="flex items-start gap-2 text-sm text-dark/70">
+                                <span className="text-accent mt-0.5 shrink-0">·</span>
+                                <span>{item}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      ))}
+                    </div>
+                    <p className="mt-5 text-sm text-dark/50 italic">{inc.noSmoke}</p>
+                  </FadeInView>
+                )
+              })()}
 
               {/* Amenities — grid with icons */}
               <div className="border-t border-surface pt-10">

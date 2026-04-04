@@ -162,6 +162,16 @@ const CAFES: Place[] = [
     tripadvisor: 'https://www.tripadvisor.com/Restaurant_Review-g316035-d23961843-Reviews-Meme_s_Cakes-El_Chalten_Province_of_Santa_Cruz_Patagonia.html',
     gmaps: 'https://maps.google.com/?q=Memes+Cakes+El+Chalten+Argentina',
   },
+  {
+    emoji: '🍦',
+    key: 'domo',
+    rating: 4.6,
+    reviews: 89,
+    price: '$',
+    tags: [],
+    gmaps: 'https://maps.google.com/?q=Heladeria+Domo+Blanco+El+Chalten+Argentina',
+    tripadvisor: 'https://www.tripadvisor.com/Restaurant_Review-g316035-d3664700-Reviews-Domo_Blanco-El_Chalten_Province_of_Santa_Cruz_Patagonia.html',
+  },
 ]
 
 // ── i18n ──────────────────────────────────────────────────────────────────────
@@ -371,6 +381,16 @@ const PLACE_COPY: Record<string, Record<string, { name: string; desc: string; hi
     ko: { name: "Meme's Cakes", desc: '마피아 건물 위층에 있는 작은 수제 제과점. 둘세 데 레체를 곁들인 아몬드 알파호레스, 애플 크럼블, 케이크, 핫 초콜릿. 마을에서 가장 작고 진정한 곳.', highlight: '아몬드 알파호레스는 필수 — 트레킹용으로 여분도 사세요' },
     ja: { name: "Meme's Cakes", desc: 'マフィアビル上階の小さな手作りベーカリー。ドゥルセ・デ・レチェを添えたアーモンドアルファホレス、アップルクランブル、ケーキ、ホットチョコレート。町で最も小さく本物らしい場所。', highlight: 'アーモンドアルファホレスは必食 — トレッキング用に余分に購入を' },
     zh: { name: "Meme's Cakes", desc: '马菲亚大楼上层的小型自制烘焙店。配有牛奶糖的杏仁阿尔法乔雷斯、苹果酥、蛋糕和热可可。镇上最小、最正宗的地方。', highlight: '杏仁阿尔法乔雷斯必吃——多买些带去徒步' },
+  },
+  domo: {
+    es: { name: 'Heladería Domo Blanco', desc: 'La heladería más querida de El Chaltén, con historia desde 1998. Sabores artesanales de calafate, chocolate patagónico, dulce de leche y frutas de estación. Av. San Martín 164.', highlight: 'El calafate es el sabor local — probalo antes de irte' },
+    en: { name: 'Heladería Domo Blanco', desc: 'El Chaltén\'s most beloved ice cream shop, serving since 1998. Artisanal flavors: calafate berry, Patagonian chocolate, dulce de leche and seasonal fruits. Av. San Martín 164.', highlight: 'Calafate berry is the local flavor — try it before you leave' },
+    pt: { name: 'Heladería Domo Blanco', desc: 'A sorveteria mais querida de El Chaltén, em funcionamento desde 1998. Sabores artesanais: calafate, chocolate patagônico, doce de leite e frutas da época. Av. San Martín 164.', highlight: 'O sabor de calafate é o local — experimente antes de partir' },
+    fr: { name: 'Heladería Domo Blanco', desc: 'La gelateria la plus aimée d\'El Chaltén, ouverte depuis 1998. Glaces artisanales : calafate, chocolat patagonien, dulce de leche et fruits de saison. Av. San Martín 164.', highlight: 'Le calafate est la saveur locale — à goûter avant de partir' },
+    de: { name: 'Heladería Domo Blanco', desc: 'El Cháltens beliebteste Eisdiele seit 1998. Hausgemachte Sorten: Calafate-Beere, patagonische Schokolade, Dulce de Leche und Saisonfrüchte. Av. San Martín 164.', highlight: 'Calafate ist die lokale Sorte — unbedingt probieren' },
+    ko: { name: 'Heladería Domo Blanco', desc: '1998년부터 운영된 엘 찰텐에서 가장 사랑받는 아이스크림 가게. 수제 맛: 칼라파테 베리, 파타고니아 초콜릿, 둘세 데 레체, 계절 과일. Av. San Martín 164.', highlight: '칼라파테는 현지 맛 — 떠나기 전에 꼭 맛보세요' },
+    ja: { name: 'Heladería Domo Blanco', desc: '1998年から続くエル・チャルテンで最も愛されるアイスクリーム店。手作りフレーバー：カラファテベリー、パタゴニアチョコレート、ドゥルセ・デ・レチェ、季節のフルーツ。Av. San Martín 164。', highlight: 'カラファテは地元の味 — 帰る前にぜひ' },
+    zh: { name: 'Heladería Domo Blanco', desc: '查尔腾最受欢迎的冰淇淋店，自1998年起营业。手工口味：卡拉法特浆果、巴塔哥尼亚巧克力、牛奶糖和应季水果。Av. San Martín 164。', highlight: '卡拉法特是当地特色口味——离开前一定要尝' },
   },
 }
 

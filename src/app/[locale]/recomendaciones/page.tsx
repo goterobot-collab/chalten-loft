@@ -339,6 +339,7 @@ const SECTIONS: Section[] = [
     items: {
       es: [
         { text: 'Los dos supermercados principales son El Relincho y La Anónima. Los precios son considerablemente más altos que en Buenos Aires o El Calafate.', type: 'info' },
+        { text: 'Cápsulas de café Nespresso: se consiguen en Distribuidora Ferrari (Halvorsen 115) y en Halvorsen. Ideal para usar con la cafetera del loft.', type: 'tip' },
         { text: 'Si vas a cocinar mucho, stockeate de productos frescos y secos en El Calafate antes de llegar — hay más variedad y mejores precios.', type: 'tip' },
         { text: 'Horario general de comercios: 10h–13h y 15h–21h. Los cafés abren desde las 8h.', type: 'info' },
         { text: 'Hay tiendas de equipamiento de montaña en el pueblo (ej.: BajoZero) para alquilar o comprar equipo.', type: 'info' },
@@ -346,6 +347,7 @@ const SECTIONS: Section[] = [
       ],
       en: [
         { text: 'The two main supermarkets are El Relincho and La Anónima. Prices are considerably higher than in Buenos Aires or El Calafate.', type: 'info' },
+        { text: 'Nespresso capsules: available at Distribuidora Ferrari (Halvorsen 115) and Halvorsen. Perfect for the loft\'s coffee machine.', type: 'tip' },
         { text: 'If you plan to cook a lot, stock up on fresh and dry products in El Calafate before arriving — more variety and better prices.', type: 'tip' },
         { text: 'General store hours: 10am–1pm and 3pm–9pm. Cafés open from 8am.', type: 'info' },
         { text: 'There are mountain gear shops in town (e.g. BajoZero) for renting or buying equipment.', type: 'info' },
@@ -353,6 +355,7 @@ const SECTIONS: Section[] = [
       ],
       pt: [
         { text: 'Os dois supermercados principais são El Relincho e La Anónima. Os preços são consideravelmente mais altos do que em Buenos Aires ou El Calafate.', type: 'info' },
+        { text: 'Cápsulas Nespresso: disponíveis na Distribuidora Ferrari (Halvorsen 115) e na Halvorsen. Ideal para a cafeteira do loft.', type: 'tip' },
         { text: 'Se vai cozinhar bastante, estocar produtos frescos e secos em El Calafate antes de chegar — há mais variedade e melhores preços.', type: 'tip' },
         { text: 'Horário geral do comércio: 10h–13h e 15h–21h. Cafés abrem a partir das 8h.', type: 'info' },
         { text: 'Há lojas de equipamentos de montanha no vilarejo (ex.: BajoZero) para alugar ou comprar equipamentos.', type: 'info' },
@@ -360,6 +363,7 @@ const SECTIONS: Section[] = [
       ],
       fr: [
         { text: 'Les deux principaux supermarchés sont El Relincho et La Anónima. Les prix sont considérablement plus élevés qu\'à Buenos Aires ou El Calafate.', type: 'info' },
+        { text: 'Capsules Nespresso : disponibles chez Distribuidora Ferrari (Halvorsen 115) et Halvorsen. Parfait pour la machine à café du loft.', type: 'tip' },
         { text: 'Si vous prévoyez de beaucoup cuisiner, faites le plein de produits frais et secs à El Calafate avant d\'arriver — plus de choix et meilleurs prix.', type: 'tip' },
         { text: 'Horaires généraux des commerces : 10h–13h et 15h–21h. Les cafés ouvrent dès 8h.', type: 'info' },
         { text: 'Il y a des magasins d\'équipement de montagne dans le village (ex. : BajoZero) pour louer ou acheter du matériel.', type: 'info' },
@@ -367,6 +371,7 @@ const SECTIONS: Section[] = [
       ],
       de: [
         { text: 'Die zwei Hauptsupermärkte sind El Relincho und La Anónima. Die Preise sind deutlich höher als in Buenos Aires oder El Calafate.', type: 'info' },
+        { text: 'Nespresso-Kapseln: erhältlich bei Distribuidora Ferrari (Halvorsen 115) und Halvorsen. Perfekt für die Kaffeemaschine im Loft.', type: 'tip' },
         { text: 'Wenn Sie viel kochen wollen, kaufen Sie frische und trockene Produkte in El Calafate ein — mehr Auswahl und bessere Preise.', type: 'tip' },
         { text: 'Allgemeine Geschäftszeiten: 10–13 Uhr und 15–21 Uhr. Cafés öffnen ab 8 Uhr.', type: 'info' },
         { text: 'Es gibt Bergausrüstungsgeschäfte im Ort (z. B. BajoZero) zum Mieten oder Kaufen von Ausrüstung.', type: 'info' },
@@ -374,6 +379,7 @@ const SECTIONS: Section[] = [
       ],
       ko: [
         { text: '두 개의 주요 슈퍼마켓은 El Relincho와 La Anónima입니다. 부에노스아이레스나 칼라파테보다 가격이 상당히 높습니다.', type: 'info' },
+        { text: 'Nespresso 캡슐: Distribuidora Ferrari (Halvorsen 115)와 Halvorsen에서 구입 가능. 로프트 커피머신에 딱 맞습니다.', type: 'tip' },
         { text: '요리를 많이 할 계획이라면 도착 전 칼라파테에서 신선식품과 건식품을 구입하세요 — 더 다양하고 가격도 낫습니다.', type: 'tip' },
         { text: '일반 상점 시간: 오전 10시~오후 1시 및 오후 3시~9시. 카페는 오전 8시부터 오픈.', type: 'info' },
         { text: '마을에 장비 대여/구매 가능한 등산장비점이 있습니다(예: BajoZero).', type: 'info' },
@@ -381,6 +387,7 @@ const SECTIONS: Section[] = [
       ],
       ja: [
         { text: '2つの主なスーパーはEl RelinchoとLa Anónimaです。ブエノスアイレスやエル・カラファテより価格がかなり高いです。', type: 'info' },
+        { text: 'ネスプレッソカプセル：Distribuidora Ferrari（Halvorsen 115）とHalvorsenで購入可能。ロフトのコーヒーマシンにぴったりです。', type: 'tip' },
         { text: '料理を多くする予定なら、到着前にエル・カラファテで食材を揃えてください — 品揃えも良く値段も安い。', type: 'tip' },
         { text: '一般店舗時間：10時〜13時と15時〜21時。カフェは8時から。', type: 'info' },
         { text: '町には山岳装備店があります（例：BajoZero）、レンタルまたは購入可能。', type: 'info' },
@@ -388,6 +395,7 @@ const SECTIONS: Section[] = [
       ],
       zh: [
         { text: '两大主要超市是El Relincho和La Anónima。价格明显高于布宜诺斯艾利斯或卡拉法特。', type: 'info' },
+        { text: 'Nespresso胶囊：可在Distribuidora Ferrari（Halvorsen 115）和Halvorsen购买。非常适合使用阁楼的咖啡机。', type: 'tip' },
         { text: '如果计划多做饭，在到达前在卡拉法特购买新鲜食材和干货——品种更多，价格更好。', type: 'tip' },
         { text: '一般商店时间：上午10点至下午1点及下午3点至9点。咖啡馆从上午8点开始营业。', type: 'info' },
         { text: '村里有山地装备店（如BajoZero）可以租用或购买装备。', type: 'info' },
