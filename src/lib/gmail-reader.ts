@@ -26,6 +26,14 @@ export type GuestData = {
   emailDate: string        // ISO timestamp
 }
 
+// ── VRBO listing ID → property slug mapping ──────────────────────────────────
+// Fill in the VRBO listing IDs for each apartment (visible in your Vrbo host dashboard)
+const VRBO_LISTING_MAP: Record<string, string> = {
+  '4985155': 'chalten-loft-cerro-torre', // TODO: verify which apt this is
+  // '1234567': 'chalten-loft-fitz-roy',
+  // '8901234': 'chalten-loft-poincenot',
+}
+
 // ── Main export: fetch all Airbnb confirmation emails ───────────────────────
 
 export async function fetchAirbnbGuestData(): Promise<GuestData[]> {
@@ -164,6 +172,11 @@ export async function fetchRawEmailMeta(query?: string): Promise<{ totalFound: n
 // ── Derive property slug from email property name ─────────────────────────
 
 export function propertyToSlug(propertyListing: string): string {
+  // VRBO format: "vrbo-4985155" — look up in mapping
+  const vrboMatch = propertyListing.match(/^vrbo-(\d+)/)
+  if (vrboMatch) {
+    return VRBO_LISTING_MAP[vrboMatch[1]] || 'chalten-loft-cerro-torre'
+  }
   const lower = propertyListing.toLowerCase()
   // "CHALTÉN LOFT / DPTO2", "CHALTÉN LOFT/ DPTO. 2", etc.
   const dptoMatch = lower.match(/dpto\.?\s*(\d)/)
@@ -179,10 +192,116 @@ export function propertyToSlug(propertyListing: string): string {
   return 'chalten-loft-fitz-roy'
 }
 
+// ── VRBO/HomeAway email parser ───────────────────────────────────────────────
+
+export async function fetchVrboGuestData(): Promise<GuestData[]> {
+  if (!process.env.GOOGLE_OAUTH_CLIENT_ID || !process.env.GOOGLE_GMAIL_REFRESH_TOKEN) {
+    return []
+  }
+
+  const gmail = getGmailClient()
+  const results: GuestData[] = []
+
+  // VRBO/HomeAway sends from messages.homeaway.com / vrbo.com
+  const search = await gmail.users.messages.list({
+    userId: 'me',
+    q: 'from:messages.homeaway.com OR from:vrbo.com (subject:"Reservation" OR subject:"reservation") -is:spam',
+    maxResults: 100,
+  })
+
+  const messages = search.data.messages || []
+  if (messages.length === 0) return []
+
+  const fetched = await Promise.allSettled(
+    messages
+      .filter(msg => !!msg.id)
+      .map(msg =>
+        gmail.users.messages.get({
+          userId: 'me',
+          id: msg.id!,
+          format: 'full',
+        })
+      )
+  )
+
+  for (const result of fetched) {
+    if (result.status !== 'fulfilled') continue
+    try {
+      const full = result.value
+      const headers = full.data.payload?.headers || []
+      const subject = headers.find((h: any) => h.name === 'Subject')?.value || ''
+      const bodyText = extractBody(full.data.payload)
+      const guest = parseVrboEmail(subject, bodyText, full.data.internalDate)
+      if (guest) results.push(guest)
+    } catch {
+      // skip
+    }
+  }
+
+  return results
+}
+
+// Parse VRBO email subject: "Reservation from Yu Zheng: Feb 28 - Mar 3, 2026 - Vrbo #4985155"
+function parseVrboEmail(subject: string, body: string, internalDate?: string | null): GuestData | null {
+  // Guest name
+  const nameMatch = subject.match(/Reservation\s+from\s+(.+?):/i)
+  if (!nameMatch) return null
+  const guestName = nameMatch[1].trim()
+
+  // VRBO listing ID
+  const listingMatch = subject.match(/Vrbo\s+#(\d+)/i)
+  const listingId = listingMatch ? listingMatch[1] : ''
+  const slug = VRBO_LISTING_MAP[listingId] || 'chalten-loft-fitz-roy'
+
+  // Confirmation code: use VRBO ID + timestamp
+  const confirmationCode = listingId ? `VRBO${listingId}` : `VRBO_${Date.now()}`
+
+  // Dates: "Feb 28 - Mar 3, 2026"
+  const datesMatch = subject.match(/:\s+([A-Za-z]+\s+\d{1,2})\s*[-–]\s*([A-Za-z]+\s+\d{1,2}),?\s*(\d{4})/)
+  if (!datesMatch) return null
+
+  const MONTH_EN: Record<string, string> = {
+    jan: '01', feb: '02', mar: '03', apr: '04', may: '05', jun: '06',
+    jul: '07', aug: '08', sep: '09', oct: '10', nov: '11', dec: '12',
+  }
+
+  const parseEnDate = (raw: string, year: string): string | null => {
+    const m = raw.match(/([A-Za-z]+)\s+(\d{1,2})/)
+    if (!m) return null
+    const month = MONTH_EN[m[1].toLowerCase().slice(0, 3)]
+    if (!month) return null
+    return `${year}-${month}-${m[2].padStart(2, '0')}`
+  }
+
+  const year = datesMatch[3]
+  const checkIn = parseEnDate(datesMatch[1], year)
+  const checkOut = parseEnDate(datesMatch[2], year)
+  if (!checkIn || !checkOut) return null
+
+  // Guests — try to extract from body
+  let guests = 2 // default
+  const guestsMatch = body.match(/(\d+)\s+(?:guest|person|adult|traveler)/i)
+  if (guestsMatch) guests = parseInt(guestsMatch[1])
+
+  return {
+    confirmationCode,
+    guestName,
+    checkIn,
+    checkOut,
+    guests,
+    propertyListing: `vrbo-${listingId}`,
+    emailDate: new Date(parseInt(internalDate || '0') || Date.now()).toISOString(),
+  }
+}
+
 // ── Build a map keyed by slug|checkIn|checkOut for quick lookup ───────────
 
 export async function buildGuestMap(): Promise<Map<string, GuestData>> {
-  const guests = await fetchAirbnbGuestData()
+  const [airbnbGuests, vrboGuests] = await Promise.all([
+    fetchAirbnbGuestData(),
+    fetchVrboGuestData(),
+  ])
+  const guests = [...airbnbGuests, ...vrboGuests]
   const map = new Map<string, GuestData>()
 
   for (const g of guests) {
