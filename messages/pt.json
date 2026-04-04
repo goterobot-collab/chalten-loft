@@ -63,7 +63,9 @@
     "propertiesSubtitle": "Três lofts completos no coração de El Chaltén. Cada um projetado para quem veio se movimentar.",
     "propertyDesc": "Um loft de design de {sqm}m² no centro de El Chaltén. Cozinha completa, cama confortável, vista para a montanha. A três quadras da trilha.",
     "detailDesc1": "Seu espaço em El Chaltén — um canto moderno cercado pela natureza, um oásis luminoso no centro da cidade. Uma mistura perfeita de aconchego e modernidade, este loft de design de {sqm}m² é ideal para desconectar, descansar e acordar com vista para as montanhas.",
-    "detailDesc2": "A três quadras da trilha do Fitz Roy. A quatro do centro. Tudo que você precisa depois de um dia na trilha: uma cozinha de verdade, uma cama confortável e água quente que não acaba."
+    "detailDesc2": "A três quadras da trilha do Fitz Roy. A quatro do centro. Tudo que você precisa depois de um dia na trilha: uma cozinha de verdade, uma cama confortável e água quente que não acaba.",
+    "priceFrom": "A partir de",
+    "night": "noite"
   },
   "about": {
     "ourStory": "Nossa História",

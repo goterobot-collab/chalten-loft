@@ -63,7 +63,9 @@
     "propertiesSubtitle": "Trois lofts entièrement équipés au cœur d'El Chaltén. Chacun conçu pour ceux qui sont venus bouger.",
     "propertyDesc": "Un loft design de {sqm}m² au centre d'El Chaltén. Cuisine équipée, lit confortable, vue montagne. À trois pâtés de maisons du sentier.",
     "detailDesc1": "Votre espace à El Chaltén — un coin moderne entouré de nature, une oasis lumineuse au centre du village. Un mélange parfait de chaleur et de modernité, ce loft design de {sqm}m² est idéal pour se déconnecter, se reposer et se réveiller face aux montagnes.",
-    "detailDesc2": "À trois pâtés de maisons du sentier du Fitz Roy. À quatre du centre-ville. Tout ce dont vous avez besoin après une journée sur le sentier : une vraie cuisine, un lit confortable et de l'eau chaude qui ne s'arrête pas."
+    "detailDesc2": "À trois pâtés de maisons du sentier du Fitz Roy. À quatre du centre-ville. Tout ce dont vous avez besoin après une journée sur le sentier : une vraie cuisine, un lit confortable et de l'eau chaude qui ne s'arrête pas.",
+    "priceFrom": "À partir de",
+    "night": "nuit"
   },
   "about": {
     "ourStory": "Notre Histoire",

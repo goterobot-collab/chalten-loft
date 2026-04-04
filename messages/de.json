@@ -63,7 +63,9 @@
     "propertiesSubtitle": "Drei voll ausgestattete Lofts im Herzen von El Chaltén. Jedes für Menschen gestaltet, die zum Wandern gekommen sind.",
     "propertyDesc": "Ein {sqm}m² Designer-Loft im Zentrum von El Chaltén. Voll ausgestattete Küche, bequemes Bett, Bergblick. Drei Blocks vom Wanderweg.",
     "detailDesc1": "Ihr Raum in El Chaltén — eine moderne Ecke umgeben von Natur, eine helle Oase im Zentrum der Stadt. Eine perfekte Mischung aus Wärme und Modernität, dieses {sqm}m² Designer-Loft ist ideal zum Abschalten, Ausruhen und Aufwachen mit Bergblick.",
-    "detailDesc2": "Drei Blocks vom Fitz Roy-Wanderweg. Vier vom Ortszentrum. Alles, was Sie nach einem Tag auf dem Trail brauchen: eine richtige Küche, ein bequemes Bett und heißes Wasser, das nicht ausgeht."
+    "detailDesc2": "Drei Blocks vom Fitz Roy-Wanderweg. Vier vom Ortszentrum. Alles, was Sie nach einem Tag auf dem Trail brauchen: eine richtige Küche, ein bequemes Bett und heißes Wasser, das nicht ausgeht.",
+    "priceFrom": "Ab",
+    "night": "Nacht"
   },
   "about": {
     "ourStory": "Unsere Geschichte",

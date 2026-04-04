@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useParams } from 'next/navigation'
+import { useParams, useSearchParams } from 'next/navigation'
 import Image from 'next/image'
 import { useTranslations } from 'next-intl'
 import { properties } from '@/lib/properties'
@@ -18,8 +18,21 @@ export default function BookingPage() {
   const t = useTranslations('booking')
   const th = useTranslations('home')
 
-  const [dateRange, setDateRange] = useState<DateRange | undefined>()
-  const [guests, setGuests] = useState(2)
+  const searchParams = useSearchParams()
+  const initialCheckIn = searchParams.get('checkIn')
+  const initialCheckOut = searchParams.get('checkOut')
+  const initialGuests = parseInt(searchParams.get('guests') || '2')
+
+  const [dateRange, setDateRange] = useState<DateRange | undefined>(() => {
+    if (initialCheckIn && initialCheckOut) {
+      return {
+        from: new Date(initialCheckIn + 'T12:00:00'),
+        to: new Date(initialCheckOut + 'T12:00:00'),
+      }
+    }
+    return undefined
+  })
+  const [guests, setGuests] = useState(initialGuests)
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')

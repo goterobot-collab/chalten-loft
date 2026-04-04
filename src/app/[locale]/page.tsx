@@ -5,6 +5,7 @@ import { properties, heroImage, chaltenPhotos } from '@/lib/properties'
 import { Users, Bed, Maximize, MapPin, Shield, MessageCircle, Wallet } from 'lucide-react'
 import PhotoCarousel from '@/components/properties/PhotoCarousel'
 import { FadeIn, FadeInView, StaggerFadeIn, StaggerItem, SlideInView } from '@/components/ui/animations'
+import HeroSearchWidget from '@/components/booking/HeroSearchWidget'
 
 type Props = {
   params: Promise<{ locale: string }>
@@ -50,46 +51,9 @@ export default async function HomePage({ params }: Props) {
             </p>
           </FadeIn>
 
-          {/* Booking Widget — Lisboans style, floating glass */}
+          {/* Booking Widget — functional search */}
           <FadeIn delay={0.55}>
-          <div className="bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl p-6 sm:p-8 max-w-3xl mx-auto">
-            <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
-              <div className="text-left">
-                <label className="block text-[11px] font-semibold uppercase tracking-wider text-muted mb-1.5">
-                  {t('checkIn')}
-                </label>
-                <input
-                  type="date"
-                  className="w-full border-0 border-b-2 border-surface bg-transparent px-0 py-2 text-dark text-sm focus:outline-none focus:border-accent transition-colors"
-                />
-              </div>
-              <div className="text-left">
-                <label className="block text-[11px] font-semibold uppercase tracking-wider text-muted mb-1.5">
-                  {t('checkOut')}
-                </label>
-                <input
-                  type="date"
-                  className="w-full border-0 border-b-2 border-surface bg-transparent px-0 py-2 text-dark text-sm focus:outline-none focus:border-accent transition-colors"
-                />
-              </div>
-              <div className="text-left">
-                <label className="block text-[11px] font-semibold uppercase tracking-wider text-muted mb-1.5">
-                  {t('guests')}
-                </label>
-                <select className="w-full border-0 border-b-2 border-surface bg-transparent px-0 py-2 text-dark text-sm focus:outline-none focus:border-accent transition-colors">
-                  <option>1</option>
-                  <option>2</option>
-                  <option>3</option>
-                  <option>4</option>
-                </select>
-              </div>
-              <div className="flex items-end">
-                <button className="w-full bg-accent hover:bg-accent-hover text-white font-semibold rounded-xl px-6 py-3 transition-all hover:shadow-lg hover:-translate-y-0.5 text-sm">
-                  {t('search')}
-                </button>
-              </div>
-            </div>
-          </div>
+            <HeroSearchWidget />
           </FadeIn>
         </div>
 

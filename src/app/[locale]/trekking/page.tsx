@@ -1,6 +1,7 @@
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { ExternalLink, AlertTriangle, Smartphone, Clock, TrendingUp, MapPin, Zap, Shield } from 'lucide-react'
 import Image from 'next/image'
+import ContentPageBookingCTA from '@/components/content/ContentPageBookingCTA'
 
 type Props = {
   params: Promise<{ locale: string }>
@@ -592,21 +593,7 @@ export default async function TrekkingPage({ params }: Props) {
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="pb-24">
-        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 text-center">
-          <div className="bg-surface rounded-2xl p-10 border border-surface">
-            <p className="text-4xl mb-4">🏡</p>
-            <h2 className="font-heading text-2xl sm:text-3xl text-primary mb-4">{t('ctaTitle', l)}</h2>
-            <p className="text-muted mb-8 leading-relaxed">{t('ctaBody', l)}</p>
-            <a href="https://wa.me/5492901644067?text=Hola!%20Estoy%20hospedado%20en%20Chaltén%20Loft%20y%20quería%20consultar%20sobre%20los%20trekking%20recomendados."
-              target="_blank" rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 bg-accent hover:bg-accent-hover text-white font-semibold px-8 py-4 rounded-xl transition-colors">
-              📱 {t('ctaButton', l)}
-            </a>
-          </div>
-        </div>
-      </section>
+      <ContentPageBookingCTA locale={l} variant="trekking" />
     </>
   )
 }

@@ -12,6 +12,7 @@ export type Property = {
   amenities: string[]
   heroImage: string
   gallery: string[]
+  priceFrom: number
 }
 
 export const properties: Property[] = [
@@ -37,6 +38,7 @@ export const properties: Property[] = [
       'https://a0.muscache.com/im/pictures/miso/Hosting-1011472949294454066/original/36e61d07-414d-4011-a320-7a4d0f1ab9cc.jpeg?im_w=1200',
       'https://a0.muscache.com/im/pictures/miso/Hosting-1010969935135126542/original/6f059683-e26d-47e6-9b3b-b9dbcd89b7ff.jpeg?im_w=1200',
     ],
+    priceFrom: 85,
   },
   {
     slug: 'chalten-loft-cerro-torre',
@@ -61,6 +63,7 @@ export const properties: Property[] = [
       'https://a0.muscache.com/im/pictures/miso/Hosting-1292195182539473607/original/67ec68b1-f95f-4249-a51f-1d0c71159493.jpeg?im_w=1200',
       'https://a0.muscache.com/im/pictures/miso/Hosting-1292195182539473607/original/ccd51b41-79c1-4484-a13d-be13d69dc2e2.jpeg?im_w=1200',
     ],
+    priceFrom: 65,
   },
   {
     slug: 'chalten-loft-poincenot',
@@ -85,6 +88,7 @@ export const properties: Property[] = [
       'https://a0.muscache.com/im/pictures/miso/Hosting-1302399968522167298/original/b174b0c3-a6c7-493a-8e68-89765fa6fc6a.jpeg?im_w=1200',
       'https://a0.muscache.com/im/pictures/miso/Hosting-1302399968522167298/original/2d9242e0-9d48-477f-bd63-730b10d2eb63.jpeg?im_w=1200',
     ],
+    priceFrom: 75,
   },
 ]
 

@@ -6,6 +6,8 @@ import { Users, Bed, Bath, Maximize, Wifi, Car, PawPrint, Tv, CookingPot, Briefc
 import type { Metadata } from 'next'
 import PhotoCarousel from '@/components/properties/PhotoCarousel'
 import AvailabilityCalendar from '@/components/booking/AvailabilityCalendar'
+import PropertyBookingSidebar from '@/components/properties/PropertyBookingSidebar'
+import MobileBookingBar from '@/components/properties/MobileBookingBar'
 import { FadeIn, FadeInView, StaggerFadeIn, StaggerItem, SlideInView } from '@/components/ui/animations'
 
 type Props = {
@@ -253,60 +255,18 @@ export default async function PropertyPage({ params }: Props) {
 
             {/* Sidebar — Booking widget sticky */}
             <SlideInView from="right" delay={0.15} className="lg:col-span-1">
-              <div className="sticky top-24 bg-white rounded-2xl shadow-lg p-7 border border-surface/50">
-                <div className="text-center mb-6">
-                  <span className="badge-direct">{th('search')}</span>
-                </div>
-
-                <h3 className="font-heading text-xl text-primary mb-6 text-center">
-                  {th('checkAvailability')}
-                </h3>
-
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-[11px] font-semibold uppercase tracking-wider text-muted mb-1.5">
-                      {th('checkIn')}
-                    </label>
-                    <input
-                      type="date"
-                      className="w-full border border-surface rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-accent/30 transition-all"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[11px] font-semibold uppercase tracking-wider text-muted mb-1.5">
-                      {th('checkOut')}
-                    </label>
-                    <input
-                      type="date"
-                      className="w-full border border-surface rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-accent/30 transition-all"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[11px] font-semibold uppercase tracking-wider text-muted mb-1.5">
-                      {th('guests')}
-                    </label>
-                    <select className="w-full border border-surface rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-accent/30 transition-all">
-                      {Array.from({ length: property.maxGuests }, (_, i) => (
-                        <option key={i + 1}>{i + 1}</option>
-                      ))}
-                    </select>
-                  </div>
-                  <a
-                    href={`/${locale}/booking/${property.slug}`}
-                    className="block w-full bg-accent hover:bg-accent-hover text-white font-semibold rounded-xl px-6 py-3.5 transition-all hover:shadow-lg hover:-translate-y-0.5 mt-2 text-center"
-                  >
-                    {t('bookNow')}
-                  </a>
-                </div>
-
-                <p className="text-xs text-muted text-center mt-4">
-                  {t('bookDirectBest')}
-                </p>
-              </div>
+              <PropertyBookingSidebar
+                slug={property.slug}
+                locale={locale}
+                maxGuests={property.maxGuests}
+                priceFrom={property.priceFrom}
+              />
             </SlideInView>
           </div>
         </div>
       </section>
+
+      <MobileBookingBar slug={property.slug} priceFrom={property.priceFrom} />
     </>
   )
 }

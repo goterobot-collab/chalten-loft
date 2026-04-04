@@ -6,11 +6,19 @@ import PhotoCarousel from '@/components/properties/PhotoCarousel'
 
 type Props = {
   params: Promise<{ locale: string }>
+  searchParams: Promise<{ checkIn?: string; checkOut?: string; guests?: string }>
 }
 
-export default async function PropertiesPage({ params }: Props) {
+export default async function PropertiesPage({ params, searchParams }: Props) {
   const { locale } = await params
+  const { checkIn, checkOut, guests } = await searchParams
   setRequestLocale(locale)
+
+  const bookingParamsObj = new URLSearchParams()
+  if (checkIn) bookingParamsObj.set('checkIn', checkIn)
+  if (checkOut) bookingParamsObj.set('checkOut', checkOut)
+  if (guests) bookingParamsObj.set('guests', guests)
+  const bookingQuery = bookingParamsObj.toString() ? `?${bookingParamsObj.toString()}` : ''
   const t = await getTranslations({ locale, namespace: 'home' })
   const tp = await getTranslations({ locale, namespace: 'property' })
 
@@ -85,10 +93,14 @@ export default async function PropertiesPage({ params }: Props) {
                       {t('location')}
                     </div>
 
-                    <span className="inline-flex items-center gap-2 text-accent font-semibold group-hover:gap-3 transition-all">
+                    <a
+                      href={`/${locale}/booking/${property.slug}${bookingQuery}`}
+                      className="inline-flex items-center gap-2 text-accent font-semibold group-hover:gap-3 transition-all"
+                      onClick={(e) => e.stopPropagation()}
+                    >
                       {tp('bookNow')}
                       <span className="transition-transform group-hover:translate-x-1">→</span>
-                    </span>
+                    </a>
                   </div>
                 </div>
               </Link>

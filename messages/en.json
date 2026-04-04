@@ -63,7 +63,9 @@
     "propertiesSubtitle": "Three fully equipped lofts in the heart of El Chaltén. Each one designed for people who came to move.",
     "propertyDesc": "A {sqm}m² designer loft in the center of El Chaltén. Fully equipped kitchen, comfortable bed, mountain views. Three blocks from the trailhead.",
     "detailDesc1": "Your space in El Chaltén — a modern corner surrounded by nature, a bright oasis in the center of town. A perfect blend of warmth and modernity, this {sqm}m² designer loft is ideal for disconnecting, resting and waking up to mountain views.",
-    "detailDesc2": "Three blocks from the Fitz Roy trailhead. Four from the town centre. Everything you need after a day on the trail: a real kitchen, a comfortable bed, and hot water that does not run out."
+    "detailDesc2": "Three blocks from the Fitz Roy trailhead. Four from the town centre. Everything you need after a day on the trail: a real kitchen, a comfortable bed, and hot water that does not run out.",
+    "priceFrom": "From",
+    "night": "night"
   },
   "about": {
     "ourStory": "Our Story",
