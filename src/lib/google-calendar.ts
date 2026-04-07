@@ -46,7 +46,7 @@ export async function addCheckOutEvent(params: EventParams) {
 
   return createEvent({
     summary: `🔴 ${params.propertyName} · ${freeLabel}`,
-    description: `EGRESO + LIMPIEZA\n\n${params.maxGuests ? `Dejar loft para ${params.maxGuests} pax\n` : ''}${freeDesc}`,
+    description: `EGRESO + LIMPIEZA\n\n${(params.nextGuests ?? params.maxGuests) ? `Dejar loft para ${params.nextGuests ?? params.maxGuests} pax\n` : ''}${freeDesc}`,
     date: params.checkOut,
     colorId: '11', // Tomato red
     reminders: [
@@ -149,6 +149,8 @@ export type EventParams = {
   nights: number
   freeDaysAfter?: number | null
   maxGuests?: number
+  nextGuests?: number   // actual guest count of next reservation (if known)
+  nextGuestName?: string
 }
 
 function formatDescription(params: EventParams): string {

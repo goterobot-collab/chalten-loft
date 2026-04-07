@@ -235,7 +235,22 @@ await addTurnaroundEvent({
             })
             eventCount++
           } else {
-await addCheckOutEvent(params)
+            // Even if not back-to-back, look up next guest to show correct "Dejar loft para N pax"
+            let nextGuestsForCheckout: number | undefined
+            if (nextReservation) {
+              const nextGmailKey = `${slug}|${nextReservation.startDate}|${nextReservation.endDate}`
+              let nextGmailData: GuestData | undefined = guestMap.get(nextGmailKey)
+              if (!nextGmailData) {
+                for (const [key, data] of guestMap) {
+                  if (!key.startsWith(slug + '|')) continue
+                  const diffIn = Math.abs(new Date(data.checkIn).getTime() - new Date(nextReservation.startDate).getTime()) / 86400000
+                  const diffOut = Math.abs(new Date(data.checkOut).getTime() - new Date(nextReservation.endDate).getTime()) / 86400000
+                  if (diffIn <= 2 && diffOut <= 2) { nextGmailData = data; break }
+                }
+              }
+              nextGuestsForCheckout = nextGmailData?.guests ?? nextReservation.guestCount ?? undefined
+            }
+await addCheckOutEvent({ ...params, nextGuests: nextGuestsForCheckout })
             eventCount++
           }
         } catch (err) {
