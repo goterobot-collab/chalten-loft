@@ -7,5 +7,14 @@
     "guestName": "Dario",
     "guests": 2,
     "confirmationCode": "MANUAL_DARIO_20260402"
+  },
+  {
+    "note": "Simon Xu - no aparece en iCal (listing 5 estrellas con delay), ingreso manual",
+    "slug": "chalten-loft-fitz-roy",
+    "checkIn": "2026-04-07",
+    "checkOut": "2026-04-13",
+    "guestName": "Simon Xu",
+    "guests": 2,
+    "confirmationCode": "MANUAL_SIMON_20260407"
   }
 ]
