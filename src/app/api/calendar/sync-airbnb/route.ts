@@ -60,27 +60,30 @@ export async function GET(req: Request) {
 
       // Dedup por solapamiento: si dos reservas se solapan en fechas, quedarse con la que
       // tiene nombre de huésped real (no "Not available" / "Huésped Airbnb")
-      const deduped = allReservations
-        .sort((a, b) => a.startDate.localeCompare(b.startDate))
-        .filter((r, idx, arr) => {
-          // Check if this reservation overlaps with any earlier one
-          const overlaps = arr.slice(0, idx).some(prev =>
-            r.startDate < prev.endDate && r.endDate > prev.startDate
-          )
-          if (!overlaps) return true
-          // Overlaps — keep this one only if it has a real guest name and the prev doesn't
-          const prev = arr.slice(0, idx).find(p =>
-            r.startDate < p.endDate && r.endDate > p.startDate
-          )!
-          const prevIsGeneric = ['Reserved', 'Not available', 'Airbnb'].includes(prev.summary)
-          const thisIsReal = !['Reserved', 'Not available', 'Airbnb'].includes(r.summary)
-          if (thisIsReal && prevIsGeneric) {
-            // Replace prev with this one
-            const prevIdx = arr.indexOf(prev)
-            arr[prevIdx] = r
-          }
-          return false
+      // Bug fix: usar array explícito de KEPT para no chequear contra items ya descartados.
+      // Tiebreaker por endDate: reservas cortas (específicas) antes que bloques largos.
+      const GENERIC_LABELS = ['Reserved', 'Not available', 'Airbnb']
+      const sorted = allReservations
+        .sort((a, b) => {
+          const s = a.startDate.localeCompare(b.startDate)
+          return s !== 0 ? s : a.endDate.localeCompare(b.endDate) // shorter first for equal startDates
         })
+      const deduped: typeof allReservations = []
+      for (const r of sorted) {
+        const overlapIdx = deduped.findIndex(prev =>
+          r.startDate < prev.endDate && r.endDate > prev.startDate
+        )
+        if (overlapIdx === -1) {
+          deduped.push(r)
+        } else {
+          const prev = deduped[overlapIdx]
+          const prevIsGeneric = GENERIC_LABELS.some(g => prev.summary.includes(g))
+          const thisIsReal = !GENERIC_LABELS.some(g => r.summary.includes(g))
+          if (thisIsReal && prevIsGeneric) {
+            deduped[overlapIdx] = r // replace generic block with real reservation
+          }
+        }
+      }
 
       // Inject Gmail reservations that are missing from iCal (e.g. today's checkouts
       // that Airbnb already removed from the feed). This ensures turnaround detection works.
@@ -121,7 +124,7 @@ export async function GET(req: Request) {
         const end = new Date(checkOut + 'T12:00:00')
         const nights = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24))
 
-        const GENERIC = ['Reserved', 'Not available', 'Airbnb', 'Not Available']
+        const GENERIC = [...GENERIC_LABELS, 'Not Available']
         const guestName = GENERIC.some(g => reservation.summary.includes(g))
           ? 'Huésped Airbnb'
           : reservation.summary
