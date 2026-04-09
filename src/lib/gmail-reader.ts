@@ -4,13 +4,19 @@ import overridesData from '../data/guest-overrides.json'
 // ── OAuth2 Gmail client ──────────────────────────────────────────────────────
 // Setup: run scripts/get-gmail-token.mjs once to get GOOGLE_GMAIL_REFRESH_TOKEN
 
+// Strip whitespace AND literal "\n" (backslash-n) that can appear when env vars
+// are pasted with escape sequences. .trim() alone does NOT remove literal \n.
+function cleanEnv(v: string | undefined): string | undefined {
+  return v?.replace(/\\n$/g, '').trim()
+}
+
 function getGmailClient() {
   const oauth2 = new google.auth.OAuth2(
-    process.env.GOOGLE_OAUTH_CLIENT_ID?.trim(),
-    process.env.GOOGLE_OAUTH_CLIENT_SECRET?.trim(),
+    cleanEnv(process.env.GOOGLE_OAUTH_CLIENT_ID),
+    cleanEnv(process.env.GOOGLE_OAUTH_CLIENT_SECRET),
   )
   oauth2.setCredentials({
-    refresh_token: process.env.GOOGLE_GMAIL_REFRESH_TOKEN?.trim(),
+    refresh_token: cleanEnv(process.env.GOOGLE_GMAIL_REFRESH_TOKEN),
   })
   return google.gmail({ version: 'v1', auth: oauth2 })
 }
