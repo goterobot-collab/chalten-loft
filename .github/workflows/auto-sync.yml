@@ -13,11 +13,22 @@ jobs:
     steps:
       - name: Trigger auto-sync
         run: |
-          response=$(curl -sf 'https://chalten-loft.vercel.app/api/auto-sync' 2>&1)
-          echo "$response" | python3 -m json.tool 2>/dev/null || echo "$response"
-          synced=$(echo "$response" | python3 -c "import sys,json; print(json.load(sys.stdin).get('synced',False))" 2>/dev/null)
+          # -s = silent, NO -f (don't fail on HTTP 4xx/5xx — avoid spam emails)
+          response=$(curl -s --max-time 30 'https://chalten-loft.vercel.app/api/auto-sync' 2>&1)
+          echo "Response: $response"
+
+          # Parse result
+          synced=$(echo "$response" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('synced',False))" 2>/dev/null || echo "False")
+          error=$(echo "$response" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('error',''))" 2>/dev/null || echo "")
+          reason=$(echo "$response" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('reason',''))" 2>/dev/null || echo "")
+
           if [ "$synced" = "True" ]; then
             echo "✅ Calendar synced!"
+          elif [ -n "$error" ]; then
+            echo "⚠️ Sync error: $error"
+            # Don't exit 1 — avoid failure notification spam
+          elif [ "$reason" = "no-changes" ] || [ "$reason" = "rate-limited" ]; then
+            echo "ℹ️ $reason — no action needed"
           else
             echo "ℹ️ No changes detected"
           fi
