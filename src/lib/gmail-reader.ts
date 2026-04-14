@@ -450,15 +450,18 @@ function parseEmailBody(text: string, internalDate?: string | null, subject: str
   // Guests — Multiple fallback patterns for different Airbnb email formats
   let guests = 1
 
+  // All patterns use [1-9]\d* to avoid matching "0 viajeros" / "0 adultos"
+  // that appears in review sections ("0 comentarios de viajeros", etc.)
+
   // Pattern 1: "2 viajeros" (number BEFORE "viajeros" — most common in recent Airbnb ES emails)
-  let match = text.match(/(\d+)\s+viajeros?/i)
+  let match = text.match(/([1-9]\d*)\s+viajeros?\b/i)
   if (match) {
     guests = parseInt(match[1])
   }
 
   // Pattern 2: "VIAJEROS\n\n2 adultos" (number AFTER "viajeros", with any whitespace/newlines)
   if (guests === 1) {
-    match = text.match(/viajeros[\s\S]{0,30}?(\d+)\s+adultos?/i)
+    match = text.match(/viajeros[\s\S]{0,30}?([1-9]\d*)\s+adultos?/i)
     if (match) {
       guests = parseInt(match[1])
     }
@@ -466,7 +469,7 @@ function parseEmailBody(text: string, internalDate?: string | null, subject: str
 
   // Pattern 3: "X adultos" standalone
   if (guests === 1) {
-    match = text.match(/(\d+)\s+adultos?/i)
+    match = text.match(/([1-9]\d*)\s+adultos?/i)
     if (match) {
       guests = parseInt(match[1])
     }
@@ -474,7 +477,7 @@ function parseEmailBody(text: string, internalDate?: string | null, subject: str
 
   // Pattern 4: "Huéspedes: X" or "Grupo de X"
   if (guests === 1) {
-    match = text.match(/(?:hu[eé]spedes?|grupo\s+de)[\s:]+(\d+)/i)
+    match = text.match(/(?:hu[eé]spedes?|grupo\s+de)[\s:]+([1-9]\d*)/i)
     if (match) {
       guests = parseInt(match[1])
     }
@@ -482,7 +485,7 @@ function parseEmailBody(text: string, internalDate?: string | null, subject: str
 
   // Pattern 5: "X guests" / "X people" / "X persons" (English format)
   if (guests === 1) {
-    match = text.match(/(\d+)\s+(?:guests?|people|persons?)/i)
+    match = text.match(/([1-9]\d*)\s+(?:guests?|people|persons?)/i)
     if (match) {
       guests = parseInt(match[1])
     }
