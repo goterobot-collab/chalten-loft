@@ -5,9 +5,10 @@ import overridesData from '../data/guest-overrides.json'
 // Setup: run scripts/get-gmail-token.mjs once to get GOOGLE_GMAIL_REFRESH_TOKEN
 
 // Strip whitespace AND literal "\n" (backslash-n) that can appear when env vars
-// are pasted with escape sequences. .trim() alone does NOT remove literal \n.
+// are pasted with escape sequences in Vercel. .trim() alone does NOT remove literal \n.
+// Remove ALL occurrences (not just trailing) since token can have \n anywhere when pasted.
 function cleanEnv(v: string | undefined): string | undefined {
-  return v?.replace(/\\n$/g, '').trim()
+  return v?.replace(/\\n/g, '').replace(/\s+/g, '').trim()
 }
 
 function getGmailClient() {
@@ -325,8 +326,8 @@ export async function buildGuestMap(): Promise<Map<string, GuestData>> {
   for (const o of overridesData) {
     const key = `${o.slug}|${o.checkIn}|${o.checkOut}`
     map.set(key, {
-      confirmationCode: o.confirmationCode,
-      guestName: o.guestName,
+      confirmationCode: o.confirmationCode || `MANUAL_${o.slug}_${o.checkIn}`,
+      guestName: o.guestName || 'Huésped',
       checkIn: o.checkIn,
       checkOut: o.checkOut,
       guests: o.guests,
@@ -449,13 +450,21 @@ function parseEmailBody(text: string, internalDate?: string | null, subject: str
   // Guests — Multiple fallback patterns for different Airbnb email formats
   let guests = 1
 
-  // Pattern 1: "VIAJEROS\n2 adultos" (most common in Spanish Airbnb)
-  let match = text.match(/viajeros\s*[\n\r]?\s*(\d+)\s+adultos?/i)
+  // Pattern 1: "2 viajeros" (number BEFORE "viajeros" — most common in recent Airbnb ES emails)
+  let match = text.match(/(\d+)\s+viajeros?/i)
   if (match) {
     guests = parseInt(match[1])
   }
 
-  // Pattern 2: "X adulto" without "viajeros"
+  // Pattern 2: "VIAJEROS\n\n2 adultos" (number AFTER "viajeros", with any whitespace/newlines)
+  if (guests === 1) {
+    match = text.match(/viajeros[\s\S]{0,30}?(\d+)\s+adultos?/i)
+    if (match) {
+      guests = parseInt(match[1])
+    }
+  }
+
+  // Pattern 3: "X adultos" standalone
   if (guests === 1) {
     match = text.match(/(\d+)\s+adultos?/i)
     if (match) {
@@ -463,7 +472,7 @@ function parseEmailBody(text: string, internalDate?: string | null, subject: str
     }
   }
 
-  // Pattern 3: "Huéspedes: X" or "Grupo de X"
+  // Pattern 4: "Huéspedes: X" or "Grupo de X"
   if (guests === 1) {
     match = text.match(/(?:hu[eé]spedes?|grupo\s+de)[\s:]+(\d+)/i)
     if (match) {
@@ -471,9 +480,9 @@ function parseEmailBody(text: string, internalDate?: string | null, subject: str
     }
   }
 
-  // Pattern 4: Look for "X person" or "X people" (English format)
+  // Pattern 5: "X guests" / "X people" / "X persons" (English format)
   if (guests === 1) {
-    match = text.match(/(\d+)\s+(?:person|people|guest)/i)
+    match = text.match(/(\d+)\s+(?:guests?|people|persons?)/i)
     if (match) {
       guests = parseInt(match[1])
     }

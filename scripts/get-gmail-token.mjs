@@ -14,8 +14,10 @@
 import { google } from 'googleapis'
 import readline from 'readline'
 
-const CLIENT_ID = process.env.GOOGLE_OAUTH_CLIENT_ID || 'YOUR_CLIENT_ID'
-const CLIENT_SECRET = process.env.GOOGLE_OAUTH_CLIENT_SECRET || 'YOUR_CLIENT_SECRET'
+// Strip literal \n and whitespace (same issue as in gmail-reader.ts cleanEnv)
+const clean = (v) => (v || '').replace(/\\n/g, '').replace(/\s+/g, '').trim()
+const CLIENT_ID = clean(process.env.GOOGLE_OAUTH_CLIENT_ID) || 'YOUR_CLIENT_ID'
+const CLIENT_SECRET = clean(process.env.GOOGLE_OAUTH_CLIENT_SECRET) || 'YOUR_CLIENT_SECRET'
 const REDIRECT_URI = 'urn:ietf:wg:oauth:2.0:oob' // Desktop app
 
 const oauth2Client = new google.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI)
